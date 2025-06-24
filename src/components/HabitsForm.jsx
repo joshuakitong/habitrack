@@ -42,11 +42,13 @@ const HabitsForm = ({ onSubmit, habit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 text-white">
+      <h2 className="text-xl font-bold text-center">{habit ? "Edit Habit" : "Add Habit"}</h2>
       <div>
         <label className="block mb-1 font-medium">Name *</label>
         <input
           type="text"
           value={formData.name}
+          maxLength={64}
           onChange={(e) => handleChange("name", e.target.value)}
           className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
@@ -57,9 +59,13 @@ const HabitsForm = ({ onSubmit, habit }) => {
         <label className="block mb-1 font-medium">Description</label>
         <textarea
           value={formData.description}
+          maxLength={500}
           onChange={(e) => handleChange("description", e.target.value)}
           className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <p className="text-xs text-gray-400 text-right">
+          {formData.description.length}/500 characters
+        </p>
       </div>
 
       <div>
@@ -82,7 +88,7 @@ const HabitsForm = ({ onSubmit, habit }) => {
           ))}
         </div>
         <p className="text-xs text-gray-400 mt-2">
-          If no days are selected, all days will be selected by default.
+          No selection = every day.
         </p>
       </div>
       
