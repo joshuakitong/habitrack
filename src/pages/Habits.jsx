@@ -1,16 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HabitsForm from "../components/HabitsForm";
 import Modal from "../components/Modal";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { v4 as uuidv4 } from "uuid";
 import { colorMap } from "../utils/colors";
+import { daysOfWeek } from "../utils/daysOfWeek";
 
 const Habit = () => {
-  const [habits, setHabits] = useState([]);
+  const [habits, setHabits] = useState(() => {
+    try {
+      const stored = localStorage.getItem("habits");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [editingHabit, setEditingHabit] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [habitToDelete, setHabitToDelete] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("habits", JSON.stringify(habits));
+  }, [habits]);
 
   const handleAddOrUpdateHabit = (habit) => {
     const finalHabit = {
@@ -42,9 +55,7 @@ const Habit = () => {
   };
 
   const confirmDelete = () => {
-    setHabits((prev) =>
-      prev.filter((h) => h.id !== habitToDelete?.id)
-    );
+    setHabits((prev) => prev.filter((h) => h.id !== habitToDelete?.id));
     setHabitToDelete(null);
     setIsDeleteModalOpen(false);
   };
@@ -55,8 +66,8 @@ const Habit = () => {
   };
 
   return (
-    <div className="p-6 text-white">
-      <h1 className="text-2xl font-bold mb-6">Your Habits</h1>
+    <div className="py-4 px-42 text-white">
+      <h1 className="text-2xl font-bold mb-4">Your Habits</h1>
 
       {habits.length === 0 ? (
         <p className="text-gray-400">No habits yet. Add your first one below.</p>
@@ -70,13 +81,11 @@ const Habit = () => {
               <div>
                 <p className="font-semibold">{habit.name}</p>
                 {habit.description && (
-                  <p className="text-sm text-gray-300">
-                    {habit.description}
-                  </p>
+                  <p className="text-sm text-gray-300">{habit.description}</p>
                 )}
                 {habit.days?.length > 0 && (
                   <p className="text-sm mt-1">
-                    Days: {habit.days.join(", ")}
+                    Days: {habit.days.length === 7 ? "All Days" : habit.days.join(", ")}
                   </p>
                 )}
                 {habit.color && (

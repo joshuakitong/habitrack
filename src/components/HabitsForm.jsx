@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { colorMap } from "../utils/colors";
+import { daysOfWeek } from "../utils/daysOfWeek";
 
-const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 const colors = Object.keys(colorMap);
 
 const HabitsForm = ({ onSubmit, habit }) => {
