@@ -79,7 +79,13 @@ const Habit = () => {
               className="bg-gray-700 p-4 rounded shadow flex justify-between items-start"
             >
               <div>
-                <p className="font-semibold">{habit.name}</p>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: colorMap[habit.color] }}
+                  />
+                  <p className="font-semibold">{habit.name}</p>
+                </div>
                 {habit.description && (
                   <p className="text-sm text-gray-300">{habit.description}</p>
                 )}
@@ -87,13 +93,6 @@ const Habit = () => {
                   <p className="text-sm mt-1">
                     Days: {habit.days.length === 7 ? "All Days" : habit.days.join(", ")}
                   </p>
-                )}
-                {habit.color && (
-                  <div
-                    className="w-4 h-4 mt-2 rounded-full"
-                    style={{ backgroundColor: colorMap[habit.color] }}
-                    title={habit.color}
-                  />
                 )}
               </div>
               <div className="flex gap-3">
