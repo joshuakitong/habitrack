@@ -92,7 +92,7 @@ export const buildSelectableWeeks = (habits) => {
     selectableWeeks.push({ label, offset });
   }
 
-  return selectableWeeks;
+  return selectableWeeks.reverse();;
 };
 
 export function formatDate(date) {
