@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { colorMap } from "../utils/colors";
-import { daysOfWeek } from "../utils/daysOfWeek";
+import { daysOfWeek } from "../utils/dateUtils";
 
 const colors = Object.keys(colorMap);
 

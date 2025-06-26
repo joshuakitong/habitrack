@@ -4,7 +4,7 @@ import Modal from "../components/Modal";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { v4 as uuidv4 } from "uuid";
 import { colorMap } from "../utils/colors";
-import { daysOfWeek } from "../utils/daysOfWeek";
+import { daysOfWeek } from "../utils/dateUtils";
 
 const Habit = () => {
   const [habits, setHabits] = useState(() => {
