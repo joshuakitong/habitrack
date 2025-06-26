@@ -94,15 +94,17 @@ const HabitRow = ({ habit, weekDates, onToggle }) => {
         const dateStr = formatDate(date);
         const isActive = habit.days.includes(getDayLabel(date));
         const isChecked = habit.checkedDates?.[dateStr] || false;
+        const isFuture = date > new Date();
+        const isCheckable = isActive && !isFuture;
 
         return (
           <td key={dateStr} className="text-center">
             <button
-              disabled={!isActive}
+              disabled={!isCheckable}
               onClick={() => onToggle(habit.id, dateStr)}
               className={`w-6 h-6 rounded-full border transition ${
                 isChecked ? "" : "border-gray-500"
-              } ${isActive ? "cursor-pointer" : "opacity-30 cursor-not-allowed"}`}
+              } ${isCheckable ? "cursor-pointer" : "opacity-30 cursor-not-allowed"}`}
               style={
                 isChecked
                   ? {
