@@ -70,7 +70,9 @@ export const buildSelectableWeeks = (habits) => {
     });
   });
 
-  if (!earliestDate || !latestDate) return [];
+  if (!earliestDate || !latestDate) {
+    earliestDate = latestDate = todayStart;
+  }
 
   const start = startOfWeek(earliestDate, { weekStartsOn: 0 });
   const end = startOfWeek(latestDate, { weekStartsOn: 0 });
