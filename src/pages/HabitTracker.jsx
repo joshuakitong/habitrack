@@ -1,12 +1,28 @@
 import { useEffect, useState, useRef } from "react";
-import { getWeekDates, formatWeekRange } from "../utils/dateUtils";
+import { getWeekDates, formatWeekRange, buildSelectableWeeks } from "../utils/dateUtils";
 import HabitRow from "../components/HabitRow";
 
 const HabitTracker = () => {
   const hasMounted = useRef(false);
   const [habits, setHabits] = useState([]);
   const [weekOffset, setWeekOffset] = useState(0);
+  const [selectableWeeks, setSelectableWeeks] = useState([]);
   const [weekDates, setWeekDates] = useState(getWeekDates(0));
+  const isLastDate = weekDates[weekDates.length - 1] >= new Date();
+  const hasPreviousData = habits.some((habit) => {
+    const checkedDates = habit.checkedDates || {};
+    return Object.keys(checkedDates).some((dateStr) => {
+      const [y, m, d] = dateStr.split("-").map(Number);
+      const date = new Date(y, m - 1, d);
+      return date < weekDates[0];
+    });
+  });
+
+  useEffect(() => {
+    const stored = localStorage.getItem("habits");
+    const habits = stored ? JSON.parse(stored) : [];
+    setSelectableWeeks(buildSelectableWeeks(habits));
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem("habits");
@@ -46,23 +62,30 @@ const HabitTracker = () => {
 
   return (
     <div className="py-6 px-2 text-white">
-      <h1 className="text-2xl font-bold">Habit Tracker</h1>
-      
       <div className="flex w-full items-center justify-between">
-        <div className="text-lg font-semibold text-gray-300">
-          {formatWeekRange(weekDates)}
-        </div>
+        <h1 className="text-2xl font-bold">Habit Tracker</h1>
         <div className="flex gap-2">
+          <select
+            value={weekOffset}
+            onChange={(e) => setWeekOffset(parseInt(e.target.value))}
+            className="bg-gray-800 text-white p-2 rounded cursor-pointer"
+          >
+            {selectableWeeks.map(({ label, offset }) => (
+              <option key={offset} value={offset}>{label}</option>
+            ))}
+          </select>
+          
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
-            className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer"
+            className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!hasPreviousData}
           >
             Prev
           </button>
           <button
             onClick={() => setWeekOffset((prev) => prev + 1)}
-            className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer"
-            disabled={weekOffset === 0}
+            className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLastDate}
           >
             Next
           </button>

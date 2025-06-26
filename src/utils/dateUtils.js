@@ -1,3 +1,5 @@
+import { startOfWeek, format, differenceInCalendarWeeks, addWeeks } from "date-fns";
+
 export function getCurrentWeekDates(endDate = new Date()) {
   const dayOfWeek = endDate.getDay();
   const start = new Date(endDate);
@@ -48,6 +50,49 @@ export const formatWeekRange = (dates) => {
   const yearStr = sameYear ? start.getFullYear() : "";
 
   return `${startStr} – ${endStr}${sameYear ? `, ${yearStr}` : ""}`;
+};
+
+export const buildSelectableWeeks = (habits) => {
+  const today = new Date();
+  const todayStart = startOfWeek(today, { weekStartsOn: 0 });
+
+  let earliestDate = null;
+  let latestDate = null;
+
+  habits.forEach((habit) => {
+    const checkedDates = habit.checkedDates || {};
+    Object.keys(checkedDates).forEach((dateStr) => {
+      if (!checkedDates[dateStr]) return;
+
+      const date = new Date(dateStr);
+      if (!earliestDate || date < earliestDate) earliestDate = date;
+      if (!latestDate || date > latestDate) latestDate = date;
+    });
+  });
+
+  if (!earliestDate || !latestDate) return [];
+
+  const start = startOfWeek(earliestDate, { weekStartsOn: 0 });
+  const end = startOfWeek(latestDate, { weekStartsOn: 0 });
+
+  const selectableWeeks = [];
+
+  for (
+    let date = new Date(start);
+    date <= end;
+    date = addWeeks(date, 1)
+  ) {
+    const weekStart = new Date(date);
+    const weekEnd = addWeeks(weekStart, 1);
+    weekEnd.setDate(weekEnd.getDate() - 1); // Make it 7-day range
+
+    const offset = differenceInCalendarWeeks(weekStart, todayStart, { weekStartsOn: 0 });
+
+    const label = `${format(weekStart, "MMM d")} – ${format(weekEnd, "d, yyyy")}`;
+    selectableWeeks.push({ label, offset });
+  }
+
+  return selectableWeeks;
 };
 
 export function formatDate(date) {
