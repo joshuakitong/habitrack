@@ -96,7 +96,7 @@ const HabitTracker = () => {
         <table className="table-fixed w-full text-left border-separate border-spacing-y-2">
           <thead>
             <tr>
-              <th className="pr-4 w-[18rem]">Habit</th>
+              <th className="pr-4 w-[18rem]">Habits</th>
               {weekDates.map((date) => (
                 <th key={date} className="px-2 text-center">
                   <div className="text-sm">
