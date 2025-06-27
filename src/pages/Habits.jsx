@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { colorMap } from "../utils/colors";
 import { daysOfWeek } from "../utils/dateUtils";
 
-const Habit = () => {
+const Habits = () => {
   const [habits, setHabits] = useState(() => {
     try {
       const stored = localStorage.getItem("habits");
@@ -141,4 +141,4 @@ const Habit = () => {
   );
 };
 
-export default Habit;
+export default Habits;
