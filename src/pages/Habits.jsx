@@ -3,6 +3,8 @@ import Modal from "../components/Modal";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { colorMap } from "../utils/colors";
 import { useHabitManager } from "../hooks/useHabitManager";
+import { Pencil, Trash2 } from "lucide-react";
+
 
 const Habits = () => {
   const {
@@ -12,6 +14,7 @@ const Habits = () => {
     isDeleteModalOpen,
     habitToDelete,
     setIsModalOpen,
+    setIsDeleteModalOpen,
     handleAddOrUpdateHabit,
     handleEdit,
     handleDelete,
@@ -20,7 +23,7 @@ const Habits = () => {
   } = useHabitManager();
 
   return (
-    <div className="py-4 px-42 text-white">
+    <div className="py-4 px-4 lg:px-42 text-white">
       <h1 className="text-2xl font-bold mb-4">Your Habits</h1>
 
       {habits.length === 0 ? (
@@ -50,18 +53,14 @@ const Habits = () => {
                 )}
               </div>
               <div className="flex gap-3">
-                <button
-                  onClick={() => handleEdit(habit)}
-                  className="cursor-pointer text-blue-400 hover:underline"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(habit)}
-                  className="cursor-pointer text-red-400 hover:underline"
-                >
-                  Delete
-                </button>
+                <div className="flex justify-center gap-2">
+                  <button onClick={() => handleEdit(habit)} className="text-blue-400 hover:text-blue-300 cursor-pointer">
+                    <Pencil size={16} />
+                  </button>
+                  <button onClick={() => handleDelete(habit)} className="text-red-400 hover:text-red-300 cursor-pointer">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             </li>
           ))}
@@ -76,7 +75,7 @@ const Habits = () => {
           + Add Habit
         </button>
       </div>
-
+      
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <HabitsForm 
           onSubmit={handleAddOrUpdateHabit} 

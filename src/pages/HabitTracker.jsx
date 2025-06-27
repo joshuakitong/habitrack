@@ -1,13 +1,33 @@
 import { useEffect, useState, useRef } from "react";
 import { getWeekDates, buildSelectableWeeks } from "../utils/dateUtils";
 import HabitRow from "../components/HabitRow";
+import HabitsForm from "../components/HabitsForm";
+import Modal from "../components/Modal";
+import ConfirmDelete from "../components/ConfirmDelete";
+import { useHabitManager } from "../hooks/useHabitManager";
 
 const HabitTracker = () => {
   const hasMounted = useRef(false);
-  const [habits, setHabits] = useState([]);
   const [weekOffset, setWeekOffset] = useState(0);
-  const [selectableWeeks, setSelectableWeeks] = useState([]);
   const [weekDates, setWeekDates] = useState(getWeekDates(0));
+  const [selectableWeeks, setSelectableWeeks] = useState([]);
+
+  const {
+    habits,
+    setHabits,
+    editingHabit,
+    habitToDelete,
+    isModalOpen,
+    isDeleteModalOpen,
+    setIsModalOpen,
+    setIsDeleteModalOpen,
+    confirmDelete,
+    handleEdit,
+    handleDelete,
+    handleAddOrUpdateHabit,
+    openCreateModal
+  } = useHabitManager();
+
   const isLastDate = weekDates[weekDates.length - 1] >= new Date();
   const hasPreviousData = habits.some((habit) => {
     const checkedDates = habit.checkedDates || {};
@@ -25,21 +45,18 @@ const HabitTracker = () => {
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem("habits");
-    setHabits(stored ? JSON.parse(stored) : []);
-  }, []);
+    setWeekDates(getWeekDates(weekOffset));
+  }, [weekOffset]);
 
   const toggleCheck = (habitId, dateStr) => {
     setHabits((prev) =>
       prev.map((habit) => {
         if (habit.id !== habitId) return habit;
-
         const oldChecked = habit.checkedDates || {};
         const newChecked = {
           ...oldChecked,
           [dateStr]: !oldChecked[dateStr],
         };
-
         return {
           ...habit,
           checkedDates: newChecked,
@@ -56,10 +73,6 @@ const HabitTracker = () => {
     }
   }, [habits]);
 
-  useEffect(() => {
-    setWeekDates(getWeekDates(weekOffset));
-  }, [weekOffset]);
-
   return (
     <div className="py-6 px-2 text-white">
       <div className="flex w-full items-center justify-between">
@@ -71,10 +84,11 @@ const HabitTracker = () => {
             className="bg-gray-800 text-white p-2 rounded cursor-pointer"
           >
             {selectableWeeks.map(({ label, offset }) => (
-              <option key={offset} value={offset}>{label}</option>
+              <option key={offset} value={offset}>
+                {label}
+              </option>
             ))}
           </select>
-          
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
             className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -92,13 +106,13 @@ const HabitTracker = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mt-4">
         <table className="table-fixed w-full text-left border-separate border-spacing-y-2">
           <thead>
             <tr>
-              <th className="pr-4 w-[18rem]">Habits</th>
+              <th className="w-[18rem]">Habits</th>
               {weekDates.map((date) => (
-                <th key={date} className="px-2 text-center">
+                <th key={date} className="w-[5rem] text-center">
                   <div className="text-sm">
                     {date.toLocaleDateString("en-US", { weekday: "short" })}
                   </div>
@@ -117,11 +131,37 @@ const HabitTracker = () => {
                 habit={habit}
                 weekDates={weekDates}
                 onToggle={toggleCheck}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             ))}
+            <td>
+              <button
+                onClick={openCreateModal}
+                className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+              >
+                + Add Habit
+              </button>
+            </td>
           </tbody>
         </table>
       </div>
+      
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <HabitsForm onSubmit={handleAddOrUpdateHabit} habit={editingHabit} />
+      </Modal>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <HabitsForm habit={editingHabit} onSubmit={handleAddOrUpdateHabit} />
+      </Modal>
+
+      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
+        <ConfirmDelete
+          itemName={habitToDelete?.name}
+          onConfirm={confirmDelete}
+          onCancel={() => setIsDeleteModalOpen(false)}
+        />
+      </Modal>
     </div>
   );
 };

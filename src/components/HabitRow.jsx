@@ -1,17 +1,30 @@
+import { useState, useRef, useEffect } from "react";
 import { formatDate, getDayLabel } from "../utils/dateUtils";
 import { colorMap } from "../utils/colors";
+import { Pencil, Trash2, MoreVertical } from "lucide-react";
 
-const HabitRow = ({ habit, weekDates, onToggle }) => {
+const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
   if (!habit) return null;
-  
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const getStreaks = (habit) => {
     if (!habit || typeof habit !== "object") return { current: 0, longest: 0, total: 0 };
 
     const checkedDates = habit.checkedDates || {};
     const activeDays =
-      habit.days && habit.days.length > 0
-        ? habit.days
-        : getDayLabel;
+      habit.days && habit.days.length > 0 ? habit.days : getDayLabel;
 
     const checked = Object.keys(checkedDates)
       .filter((dateStr) => checkedDates[dateStr])
@@ -80,13 +93,37 @@ const HabitRow = ({ habit, weekDates, onToggle }) => {
 
   return (
     <tr>
-      <td className="pr-4 py-2 font-medium">
-        <div className="flex items-center gap-2">
-          <div
-            className="min-w-3 min-h-3 rounded-full"
-            style={{ backgroundColor: colorMap[habit.color] }}
-          />
-          <div className="max-w-[240px] truncate">{habit.name}</div>
+      <td className="py-2 font-medium">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div
+              className="min-w-3 min-h-3 rounded-full"
+              style={{ backgroundColor: colorMap[habit.color] }}
+            />
+            <div className="max-w-[14rem] truncate">{habit.name}</div>
+          </div>
+
+          <div className="relative" ref={menuRef}>
+            <button
+              className="text-gray-300 hover:text-white p-1 cursor-pointer"
+              onClick={() => setMenuOpen((prev) => !prev)}
+            >
+              <MoreVertical size={18} />
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 mt-[-2.2rem] w-28 bg-gray-800 border border-gray-600 rounded shadow z-10">
+                <div className="flex justify-center gap-2">
+                  <button onClick={() => onEdit(habit)} className="block w-full text-left px-4 py-2 hover:bg-gray-700 text-blue-400 hover:text-blue-300 cursor-pointer">
+                    <Pencil size={16} />
+                  </button>
+                  <button onClick={() => onDelete(habit)} className="block w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400 hover:text-red-300 cursor-pointer">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </td>
 
