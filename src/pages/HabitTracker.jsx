@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { getWeekDates, formatWeekRange, buildSelectableWeeks } from "../utils/dateUtils";
+import { getWeekDates, buildSelectableWeeks } from "../utils/dateUtils";
 import HabitRow from "../components/HabitRow";
 
 const HabitTracker = () => {
