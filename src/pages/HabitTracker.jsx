@@ -5,7 +5,7 @@ import HabitsForm from "../components/HabitsForm";
 import Modal from "../components/Modal";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
-import { startOfDay } from "date-fns";
+import { startOfDay, startOfWeek, addWeeks } from "date-fns";
 import { ChevronDown } from "lucide-react";
 
 const HabitTracker = () => {
@@ -30,7 +30,9 @@ const HabitTracker = () => {
     openCreateModal
   } = useHabitManager();
 
-  const isLastDate = weekDates[weekDates.length - 1] >= new Date();
+  const today = new Date();
+  const startOfNextWeek = addWeeks(startOfWeek(today, { weekStartsOn: 0 }), 0);
+  const isLastDate = weekDates[0] >= startOfNextWeek;
   const hasPreviousData = habits.some((habit) => {
     const checkedDates = habit.checkedDates || {};
     return Object.keys(checkedDates).some((dateStr) => {
