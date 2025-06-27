@@ -5,6 +5,8 @@ import HabitsForm from "../components/HabitsForm";
 import Modal from "../components/Modal";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
+import { startOfDay } from "date-fns";
+import { ChevronDown } from "lucide-react";
 
 const HabitTracker = () => {
   const hasMounted = useRef(false);
@@ -32,9 +34,13 @@ const HabitTracker = () => {
   const hasPreviousData = habits.some((habit) => {
     const checkedDates = habit.checkedDates || {};
     return Object.keys(checkedDates).some((dateStr) => {
+      if (!checkedDates[dateStr]) return false;
+
       const [y, m, d] = dateStr.split("-").map(Number);
-      const date = new Date(y, m - 1, d);
-      return date < weekDates[0];
+      const date = startOfDay(new Date(y, m - 1, d));
+      const weekStart = startOfDay(weekDates[0]);
+
+      return date < weekStart;
     });
   });
 
@@ -78,17 +84,20 @@ const HabitTracker = () => {
       <div className="flex w-full items-center justify-between">
         <h1 className="text-2xl font-bold">Habit Tracker</h1>
         <div className="flex gap-2">
-          <select
-            value={weekOffset}
-            onChange={(e) => setWeekOffset(parseInt(e.target.value))}
-            className="bg-gray-800 text-white p-2 rounded cursor-pointer"
-          >
-            {selectableWeeks.map(({ label, offset }) => (
-              <option key={offset} value={offset}>
-                {label}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-fit">
+            <select
+              value={weekOffset}
+              onChange={(e) => setWeekOffset(parseInt(e.target.value))}
+              className="bg-gray-800 text-white p-2 pl-4 pr-10 rounded border border-gray-600 hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+            >
+              {selectableWeeks.map(({ label, offset }) => (
+                <option key={offset} value={offset}>{label}</option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-400">
+            <ChevronDown size={16} />
+          </div>
+          </div>
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
             className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -110,7 +119,7 @@ const HabitTracker = () => {
         <table className="table-fixed w-full text-left border-separate border-spacing-y-2">
           <thead>
             <tr>
-              <th className="w-[18rem]">Habits</th>
+              <th className="w-[12rem] lg:w-[18rem]">Habits</th>
               {weekDates.map((date) => (
                 <th key={date} className="w-[5rem] text-center">
                   <div className="text-sm">
@@ -135,16 +144,14 @@ const HabitTracker = () => {
                 onDelete={handleDelete}
               />
             ))}
-            <td>
-              <button
-                onClick={openCreateModal}
-                className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
-              >
-                + Add Habit
-              </button>
-            </td>
           </tbody>
         </table>
+        <button
+          onClick={openCreateModal}
+          className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+        >
+          + Add Habit
+        </button>
       </div>
       
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

@@ -71,7 +71,12 @@ export const buildSelectableWeeks = (habits) => {
   });
 
   if (!earliestDate || !latestDate) {
-    earliestDate = latestDate = todayStart;
+    earliestDate = todayStart;
+    latestDate = todayStart;
+  }
+
+  if (latestDate < todayStart) {
+    latestDate = todayStart;
   }
 
   const start = startOfWeek(earliestDate, { weekStartsOn: 0 });
@@ -86,15 +91,15 @@ export const buildSelectableWeeks = (habits) => {
   ) {
     const weekStart = new Date(date);
     const weekEnd = addWeeks(weekStart, 1);
-    weekEnd.setDate(weekEnd.getDate() - 1); // Make it 7-day range
+    weekEnd.setDate(weekEnd.getDate() - 1);
 
     const offset = differenceInCalendarWeeks(weekStart, todayStart, { weekStartsOn: 0 });
-
     const label = `${format(weekStart, "MMM d")} – ${format(weekEnd, "d, yyyy")}`;
+
     selectableWeeks.push({ label, offset });
   }
 
-  return selectableWeeks.reverse();;
+  return selectableWeeks.reverse();
 };
 
 export function formatDate(date) {

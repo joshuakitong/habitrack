@@ -30,7 +30,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
       .filter((dateStr) => checkedDates[dateStr])
       .map((dateStr) => {
         const [y, m, d] = dateStr.split("-").map(Number);
-        return new Date(Date.UTC(y, m - 1, d));
+        return new Date(y, m - 1, d);
       })
       .sort((a, b) => a - b);
 
@@ -39,7 +39,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
     const checkedSet = new Set(checked.map((d) => formatDate(d)));
     const total = [...checkedSet].filter((dStr) => {
       const [y, m, d] = dStr.split("-").map(Number);
-      const date = new Date(Date.UTC(y, m - 1, d));
+      const date = new Date(y, m - 1, d);
       return activeDays.includes(getDayLabel(date));
     }).length;
 
@@ -53,7 +53,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
     for (
       let date = new Date(start);
       date <= end;
-      date.setUTCDate(date.getUTCDate() + 1)
+      date.setDate(date.getDate() + 1)
     ) {
       const dayLabel = getDayLabel(date);
       const dateStr = formatDate(date);
@@ -67,12 +67,42 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         }
       }
     }
+    
+    const recentCheckableDays = [];
+    let cursor = new Date();
+    cursor.setHours(0, 0, 0, 0);
+
+    cursor.setDate(cursor.getDate());
+
+    while (recentCheckableDays.length < 2) {
+      const dayLabel = getDayLabel(cursor);
+      const dateStr = formatDate(cursor);
+
+      if (activeDays.includes(dayLabel)) {
+        recentCheckableDays.push({
+          dateStr,
+          isChecked: checkedSet.has(dateStr),
+        });
+      }
+
+      if (checked.length > 0 && cursor < checked[0]) break;
+
+      cursor.setDate(cursor.getDate() - 1);
+    }
+
+    if (
+      recentCheckableDays.length === 2 &&
+      !recentCheckableDays[0].isChecked &&
+      !recentCheckableDays[1].isChecked
+    ) {
+      return { current: 0, longest, total };
+    }
 
     current = 0;
     for (
       let date = new Date(end);
       date >= start;
-      date.setUTCDate(date.getUTCDate() - 1)
+      date.setDate(date.getDate() - 1)
     ) {
       const dayLabel = getDayLabel(date);
       const dateStr = formatDate(date);
@@ -100,7 +130,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
               className="min-w-3 min-h-3 rounded-full"
               style={{ backgroundColor: colorMap[habit.color] }}
             />
-            <div className="max-w-[14rem] truncate">{habit.name}</div>
+            <div className="w-[10rem] lg:w-[15rem] truncate">{habit.name}</div>
           </div>
 
           <div className="relative" ref={menuRef}>
@@ -112,7 +142,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-[-2.2rem] w-28 bg-gray-800 border border-gray-600 rounded shadow z-10">
+              <div className="absolute right-0 mt-[-1.95rem] w-28 bg-gray-800 border border-gray-600 rounded shadow z-10">
                 <div className="flex justify-center gap-2">
                   <button onClick={() => onEdit(habit)} className="block w-full text-left px-4 py-2 hover:bg-gray-700 text-blue-400 hover:text-blue-300 cursor-pointer">
                     <Pencil size={16} />
