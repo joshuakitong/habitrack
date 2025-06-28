@@ -123,17 +123,17 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
 
   return (
     <tr>
-      <td className="py-2 font-medium">
+      <td className="py-4 font-medium">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <div
               className="min-w-3 min-h-3 rounded-full"
               style={{ backgroundColor: colorMap[habit.color] }}
             />
-            <div className="w-[10rem] lg:w-[15rem] truncate">{habit.name}</div>
+            <div className="w-[10rem] lg:w-[14rem] truncate">{habit.name}</div>
           </div>
 
-          <div className="relative" ref={menuRef}>
+          <div className="relative mr-2" ref={menuRef}>
             <button
               className="text-gray-300 hover:text-white p-1 cursor-pointer"
               onClick={() => setMenuOpen((prev) => !prev)}
@@ -163,9 +163,15 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         const isChecked = habit.checkedDates?.[dateStr] || false;
         const isFuture = date > new Date();
         const isCheckable = isActive && !isFuture;
+        const isToday = formatDate(date) === formatDate(new Date());
 
         return (
-          <td key={dateStr} className="text-center">
+          <td
+            key={dateStr}
+            className={`text-center ${
+              isToday ? "bg-white/5" : "border-transparent"
+            }`}
+          >
             <button
               disabled={!isCheckable}
               onClick={() => onToggle(habit.id, dateStr)}

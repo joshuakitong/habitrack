@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { getWeekDates, buildSelectableWeeks } from "../utils/dateUtils";
+import { getWeekDates, buildSelectableWeeks, formatDate } from "../utils/dateUtils";
 import HabitRow from "../components/HabitRow";
 import HabitsForm from "../components/HabitsForm";
 import Modal from "../components/Modal";
@@ -118,18 +118,27 @@ const HabitTracker = () => {
       </div>
 
       <div className="overflow-x-auto mt-4">
-        <table className="table-fixed w-full text-left border-separate border-spacing-y-2">
+        <table className="table-fixed w-full text-left border-collapse">
           <thead>
             <tr>
               <th className="w-[12rem] lg:w-[18rem]">Habits</th>
-              {weekDates.map((date) => (
-                <th key={date} className="w-[5rem] text-center">
-                  <div className="text-sm">
-                    {date.toLocaleDateString("en-US", { weekday: "short" })}
-                  </div>
-                  <div className="text-xs text-gray-400">{date.getDate()}</div>
-                </th>
-              ))}
+              {weekDates.map((date) => {
+                const isToday = formatDate(date) === formatDate(new Date());
+
+                return (
+                  <th
+                    key={date}
+                    className={`px-2 text-center ${
+                      isToday ? "bg-white/5" : "border-transparent"
+                    }`}
+                  >
+                    <div className="text-sm">
+                      {date.toLocaleDateString("en-US", { weekday: "short" })}
+                    </div>
+                    <div className="text-xs text-gray-400">{date.getDate()}</div>
+                  </th>
+                );
+              })}
               <th className="text-center text-xs font-normal w-[3rem] leading-snug">Current Streak</th>
               <th className="text-center text-xs font-normal w-[3rem] leading-snug">Longest Streak</th>
               <th className="text-center text-xs font-normal w-[3rem] leading-snug">Total Count</th>
