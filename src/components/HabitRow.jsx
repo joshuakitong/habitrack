@@ -168,14 +168,15 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         return (
           <td
             key={dateStr}
-            className={`text-center ${
+            className={`text-center h-[3rem] ${
               isToday ? "bg-white/5" : "border-transparent"
             }`}
           >
+          <div className="flex justify-center w-[3rem] mx-auto items-center">
             <button
               disabled={!isCheckable}
               onClick={() => onToggle(habit.id, dateStr)}
-              className={`w-6 h-6 rounded-full border transition ${
+              className={`w-6 h-6 rounded border flex items-center justify-center transition ${
                 isChecked ? "" : "border-gray-500"
               } ${isCheckable ? "cursor-pointer" : "opacity-30 cursor-not-allowed"}`}
               style={
@@ -186,8 +187,11 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
                     }
                   : {}
               }
-            />
-          </td>
+            >
+              {isChecked && <span className="text-white text-sm font-bold">✓</span>}
+            </button>
+          </div>
+        </td>
         );
       })}
 

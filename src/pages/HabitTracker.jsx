@@ -90,7 +90,7 @@ const HabitTracker = () => {
             <select
               value={weekOffset}
               onChange={(e) => setWeekOffset(parseInt(e.target.value))}
-              className="bg-gray-800 text-white p-2 pl-4 pr-10 rounded border border-gray-600 hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+              className="bg-gray-800 text-sm text-white p-2 pl-4 pr-10 rounded border border-gray-600 hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
             >
               {selectableWeeks.map(({ label, offset }) => (
                 <option key={offset} value={offset}>{label}</option>
@@ -105,20 +105,20 @@ const HabitTracker = () => {
             className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!hasPreviousData}
           >
-            Prev
+            ←
           </button>
           <button
             onClick={() => setWeekOffset((prev) => prev + 1)}
             className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLastDate}
           >
-            Next
+            →
           </button>
         </div>
       </div>
 
       <div className="overflow-x-auto mt-4">
-        <table className="table-fixed w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse">
           <thead>
             <tr>
               <th className="w-[12rem] lg:w-[18rem]">Habits</th>

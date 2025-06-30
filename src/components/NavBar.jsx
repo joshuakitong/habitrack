@@ -6,7 +6,7 @@ const Navbar = () => {
   const linkInactive = "border-transparent hover:border-gray-500";
 
   return (
-    <nav className="flex justify-between items-center pt-4 text-white border-b border-gray-300">
+    <nav className="flex justify-between items-center pt-4 mx-2 text-white border-b border-gray-300">
       <div className="flex space-x-6">
         <NavLink
           to="/"
