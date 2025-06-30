@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { daysOfWeek } from "../utils/dateUtils";
+import { defaultHabits } from "../data/defaultHabits";
 
 export const useHabitManager = () => {
   const [habits, setHabits] = useState(() => {
     try {
       const stored = localStorage.getItem("habits");
-      return stored ? JSON.parse(stored) : [];
+      if (stored) return JSON.parse(stored);
+
+      localStorage.setItem("habits", JSON.stringify(defaultHabits));
+      return defaultHabits;
     } catch {
-      return [];
+      return defaultHabits;
     }
   });
 

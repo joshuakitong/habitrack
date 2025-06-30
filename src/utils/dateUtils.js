@@ -100,9 +100,9 @@ export function getDayLabel(date) {
 export const daysOfWeek = [
     "Sun",
     "Mon",
-    "Tues",
+    "Tue",
     "Wed",
-    "Thurs",
+    "Thu",
     "Fri",
     "Sat"
 ];
