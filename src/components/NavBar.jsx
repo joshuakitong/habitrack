@@ -35,6 +35,14 @@ const Navbar = () => {
         >
           Overview
         </NavLink>
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `${linkBase} ${isActive ? linkActive : linkInactive}`
+          }
+        >
+          Settings
+        </NavLink>
       </div>
     </nav>
   );

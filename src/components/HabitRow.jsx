@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { formatDate, getDayLabel } from "../utils/dateUtils";
+import { getSettings } from "../hooks/settings";
 import { colorMap } from "../utils/colors";
 import { Pencil, Trash2, MoreVertical } from "lucide-react";
 
 const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
   if (!habit) return null;
+
+  const { isEditableInTracker } = getSettings();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -132,12 +135,14 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
             <div className="w-[10rem] lg:w-[14rem] truncate">{habit.name}</div>
 
           <div className="relative mr-2" ref={menuRef}>
-            <button
-              className="text-gray-300 hover:text-white p-1 cursor-pointer"
-              onClick={() => setMenuOpen((prev) => !prev)}
-            >
-              <MoreVertical size={18} />
-            </button>
+            {isEditableInTracker && (
+              <button
+                className="text-gray-300 hover:text-white p-1 cursor-pointer"
+                onClick={() => setMenuOpen((prev) => !prev)}
+              >
+                <MoreVertical size={18} />
+              </button>
+            )}
 
             {menuOpen && (
               <div className="absolute right-0 mt-[-1.95rem] w-28 bg-gray-800 border border-gray-600 rounded shadow z-10">
@@ -157,10 +162,11 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
 
       {weekDates.map((date) => {
         const dateStr = formatDate(date);
-        const isActive = habit.days.includes(getDayLabel(date));
         const isChecked = habit.checkedDates?.[dateStr] || false;
+        const isActive = habit.days.includes(getDayLabel(date));
         const isFuture = date > new Date();
-        const isCheckable = isActive && !isFuture;
+        const isBeforeStartDate = date.setHours(0, 0, 0, 0) < new Date(getSettings().trackerStartDate).setHours(0, 0, 0, 0);
+        const isCheckable = isActive && !isFuture && !isBeforeStartDate;
         const isToday = formatDate(date) === formatDate(new Date());
 
         return (

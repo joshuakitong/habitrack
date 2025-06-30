@@ -1,8 +1,9 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/NavBar";
 import HabitTracker from "./pages/HabitTracker";
-import Habit from "./pages/Habits";
+import Habits from "./pages/Habits";
 import Overview from "./pages/Overview";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -12,8 +13,9 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<HabitTracker />} />
-            <Route path="/habits" element={<Habit />} />
+            <Route path="/habits" element={<Habits />} />
             <Route path="/overview" element={<Overview />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </div>

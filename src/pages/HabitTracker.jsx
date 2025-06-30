@@ -5,6 +5,7 @@ import HabitsForm from "../components/HabitsForm";
 import Modal from "../components/Modal";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
+import { getSettings } from "../hooks/settings";
 import { startOfDay, startOfWeek, addWeeks } from "date-fns";
 import { ChevronDown } from "lucide-react";
 
@@ -13,6 +14,7 @@ const HabitTracker = () => {
   const [weekOffset, setWeekOffset] = useState(0);
   const [weekDates, setWeekDates] = useState(getWeekDates(0));
   const [selectableWeeks, setSelectableWeeks] = useState([]);
+  const { trackerStartDate, isEditableInTracker } = getSettings();
 
   const {
     habits,
@@ -33,18 +35,7 @@ const HabitTracker = () => {
   const today = new Date();
   const startOfNextWeek = addWeeks(startOfWeek(today, { weekStartsOn: 0 }), 0);
   const isLastDate = weekDates[0] >= startOfNextWeek;
-  const hasPreviousData = habits.some((habit) => {
-    const checkedDates = habit.checkedDates || {};
-    return Object.keys(checkedDates).some((dateStr) => {
-      if (!checkedDates[dateStr]) return false;
-
-      const [y, m, d] = dateStr.split("-").map(Number);
-      const date = startOfDay(new Date(y, m - 1, d));
-      const weekStart = startOfDay(weekDates[0]);
-
-      return date < weekStart;
-    });
-  });
+  const isBeforeTrackerStart = startOfDay(weekDates[0]).getTime() > startOfDay(new Date(trackerStartDate)).getTime();
 
   useEffect(() => {
     const stored = localStorage.getItem("habits");
@@ -103,7 +94,7 @@ const HabitTracker = () => {
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
             className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!hasPreviousData}
+            disabled={!isBeforeTrackerStart}
           >
             ←
           </button>
@@ -153,16 +144,19 @@ const HabitTracker = () => {
                 onToggle={toggleCheck}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                trackerStartDate={trackerStartDate}
               />
             ))}
           </tbody>
         </table>
-        <button
-          onClick={openCreateModal}
-          className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
-        >
-          + Add Habit
-        </button>
+        {isEditableInTracker && (
+          <button
+            onClick={openCreateModal}
+            className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+          >
+            + Add Habit
+          </button>
+        )}
       </div>
       
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

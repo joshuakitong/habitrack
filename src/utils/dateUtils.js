@@ -1,4 +1,5 @@
 import { startOfWeek, format, differenceInCalendarWeeks, addWeeks } from "date-fns";
+import { getSettings } from "../hooks/settings";
 
 export function getCurrentWeekDates(endDate = new Date()) {
   const dayOfWeek = endDate.getDay();
@@ -52,54 +53,37 @@ export const formatWeekRange = (dates) => {
   return `${startStr} – ${endStr}${sameYear ? `, ${yearStr}` : ""}`;
 };
 
-export const buildSelectableWeeks = (habits) => {
+export const buildSelectableWeeks = () => {
   const today = new Date();
   const todayStart = startOfWeek(today, { weekStartsOn: 0 });
 
-  let earliestDate = null;
-  let latestDate = null;
-
-  habits.forEach((habit) => {
-    const checkedDates = habit.checkedDates || {};
-    Object.keys(checkedDates).forEach((dateStr) => {
-      if (!checkedDates[dateStr]) return;
-
-      const date = new Date(dateStr);
-      if (!earliestDate || date < earliestDate) earliestDate = date;
-      if (!latestDate || date > latestDate) latestDate = date;
-    });
-  });
-
-  if (!earliestDate || !latestDate) {
-    earliestDate = todayStart;
-    latestDate = todayStart;
-  }
-
-  if (latestDate < todayStart) {
-    latestDate = todayStart;
-  }
-
-  const start = startOfWeek(earliestDate, { weekStartsOn: 0 });
-  const end = startOfWeek(latestDate, { weekStartsOn: 0 });
+  const { trackerStartDate } = getSettings();
+  const earliestDate = startOfWeek(new Date(trackerStartDate), { weekStartsOn: 0 });
+  const latestDate = todayStart;
 
   const selectableWeeks = [];
 
   for (
-    let date = new Date(start);
-    date <= end;
+    let date = new Date(earliestDate);
+    date <= latestDate;
     date = addWeeks(date, 1)
   ) {
     const weekStart = new Date(date);
     const weekEnd = addWeeks(weekStart, 1);
     weekEnd.setDate(weekEnd.getDate() - 1);
 
-    const offset = differenceInCalendarWeeks(weekStart, todayStart, { weekStartsOn: 0 });
-    const label = `${format(weekStart, "MMM d")} – ${format(weekEnd, "d, yyyy")}`;
+    const offset = differenceInCalendarWeeks(weekStart, todayStart, {
+      weekStartsOn: 0,
+    });
+    const label = `${format(weekStart, "MMM d")} – ${format(
+      weekEnd,
+      "d, yyyy"
+    )}`;
 
     selectableWeeks.push({ label, offset });
   }
 
-  return selectableWeeks.reverse();
+  return selectableWeeks.reverse(); 
 };
 
 export function formatDate(date) {
