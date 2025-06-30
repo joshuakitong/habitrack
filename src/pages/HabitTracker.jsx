@@ -38,9 +38,7 @@ const HabitTracker = () => {
   const isBeforeTrackerStart = startOfDay(weekDates[0]).getTime() > startOfDay(new Date(trackerStartDate)).getTime();
 
   useEffect(() => {
-    const stored = localStorage.getItem("habits");
-    const habits = stored ? JSON.parse(stored) : [];
-    setSelectableWeeks(buildSelectableWeeks(habits));
+    setSelectableWeeks(buildSelectableWeeks());
   }, []);
 
   useEffect(() => {
