@@ -18,6 +18,7 @@ function App() {
         </div>
       </div>
       <div className="text-center">App description to be added here</div>
+      <div className="text-center"><i>(work in progress)</i></div>
     </Router>
   );
 }

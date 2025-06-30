@@ -128,7 +128,7 @@ const HabitTracker = () => {
                 return (
                   <th
                     key={date}
-                    className={`px-2 text-center ${
+                    className={`text-center ${
                       isToday ? "bg-white/5" : "border-transparent"
                     }`}
                   >

@@ -125,13 +125,11 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
     <tr>
       <td className="py-4 font-medium">
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
             <div
               className="min-w-3 min-h-3 rounded-full"
               style={{ backgroundColor: colorMap[habit.color] }}
             />
             <div className="w-[10rem] lg:w-[14rem] truncate">{habit.name}</div>
-          </div>
 
           <div className="relative mr-2" ref={menuRef}>
             <button
