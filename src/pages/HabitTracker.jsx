@@ -5,7 +5,7 @@ import HabitsForm from "../components/HabitsForm";
 import Modal from "../components/Modal";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
-import { getSettings } from "../hooks/settings";
+import { getSettings } from "../hooks/useSettings";
 import { startOfDay, startOfWeek, addWeeks } from "date-fns";
 import { ChevronDown } from "lucide-react";
 

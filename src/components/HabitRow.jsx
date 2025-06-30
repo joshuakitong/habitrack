@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { formatDate, getDayLabel } from "../utils/dateUtils";
-import { getSettings } from "../hooks/settings";
+import { getSettings } from "../hooks/useSettings";
 import { colorMap } from "../utils/colors";
 import { Pencil, Trash2, MoreVertical } from "lucide-react";
 

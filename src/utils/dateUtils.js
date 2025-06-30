@@ -1,5 +1,5 @@
 import { startOfWeek, format, differenceInCalendarWeeks, addWeeks } from "date-fns";
-import { getSettings } from "../hooks/settings";
+import { getSettings } from "../hooks/useSettings";
 
 export function getCurrentWeekDates(endDate = new Date()) {
   const dayOfWeek = endDate.getDay();
