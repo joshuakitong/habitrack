@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import HabitsForm from "../components/HabitsForm";
-import Modal from "../components/Modal";
-import ConfirmDelete from "../components/ConfirmDelete";
+import HabitsForm from "../components/habits/HabitsForm";
+import Modal from "../components/habits/Modal";
+import ConfirmDelete from "../components/habits/ConfirmDelete";
 import { getSettings } from "../hooks/useSettings";
 import { colorMap } from "../utils/colors";
 import { useHabitManager } from "../hooks/useHabitManager";

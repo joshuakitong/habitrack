@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { getWeekDates, buildSelectableWeeks, formatDate } from "../utils/dateUtils";
-import HabitRow from "../components/HabitRow";
-import HabitsForm from "../components/HabitsForm";
-import Modal from "../components/Modal";
-import ConfirmDelete from "../components/ConfirmDelete";
+import HabitRow from "../components/habits/HabitRow";
+import HabitsForm from "../components/habits/HabitsForm";
+import Modal from "../components/habits/Modal";
+import ConfirmDelete from "../components/habits/ConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
 import { getSettings } from "../hooks/useSettings";
 import { startOfDay, startOfWeek, addWeeks } from "date-fns";
@@ -180,7 +180,7 @@ const HabitTracker = () => {
           </SortableContext>
         </DndContext>
       </div>
-      
+
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <HabitsForm 
           onSubmit={handleAddOrUpdateHabit} 
