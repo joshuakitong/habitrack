@@ -1,18 +1,6 @@
 import { startOfWeek, format, differenceInCalendarWeeks, addWeeks } from "date-fns";
 import { getSettings } from "../hooks/useSettings";
 
-export function getCurrentWeekDates(endDate = new Date()) {
-  const dayOfWeek = endDate.getDay();
-  const start = new Date(endDate);
-  start.setDate(endDate.getDate() - dayOfWeek);
-
-  return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(start);
-    d.setDate(start.getDate() + i);
-    return d;
-  });
-}
-
 export function getWeekDates(offset = 0) {
   const today = new Date();
   const startOfWeek = new Date(today);
@@ -27,31 +15,6 @@ export function getWeekDates(offset = 0) {
   }
   return week;
 }
-
-export const formatWeekRange = (dates) => {
-  if (!dates || dates.length === 0) return "";
-
-  const start = dates[0];
-  const end = dates[dates.length - 1];
-
-  const sameMonth = start.getMonth() === end.getMonth();
-  const sameYear = start.getFullYear() === end.getFullYear();
-
-  const startStr = start.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-  });
-
-  const endStr = end.toLocaleDateString("en-US", {
-    month: sameMonth ? undefined : "long",
-    day: "numeric",
-    ...(sameYear ? {} : { year: "numeric" }),
-  });
-
-  const yearStr = sameYear ? start.getFullYear() : "";
-
-  return `${startStr} – ${endStr}${sameYear ? `, ${yearStr}` : ""}`;
-};
 
 export const buildSelectableWeeks = () => {
   const today = new Date();
