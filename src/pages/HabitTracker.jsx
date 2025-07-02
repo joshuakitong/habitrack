@@ -110,15 +110,15 @@ const HabitTracker = () => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              <th className="w-[12rem] lg:w-[18rem] pl-4 border border-gray-600">Habits</th>
+              <th className="w-[12rem] lg:w-[18rem] pl-4 border border-gray-600 bg-gray-900/25">Habits</th>
               {weekDates.map((date) => {
                 const isToday = formatDate(date) === formatDate(new Date());
 
                 return (
                   <th
                     key={date}
-                    className={`text-center border-y border-gray-600 ${
-                      isToday ? "bg-white/5" : ""
+                    className={`text-center border-y border-gray-600 bg-gray-900/10 ${
+                      isToday ? "bg-gray-900/25" : ""
                     }`}
                   >
                     <div className="text-sm mt-2">
@@ -128,9 +128,9 @@ const HabitTracker = () => {
                   </th>
                 );
               })}
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/50 border-y border-gray-600">Current Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-gray-600">Longest Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-r border-gray-600">Total Count</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/10 border-y border-gray-600">Current Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/10 border-y border-gray-600">Longest Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/10 border-y border-r border-gray-600">Total Count</th>
             </tr>
           </thead>
           <tbody>
