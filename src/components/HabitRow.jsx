@@ -7,7 +7,7 @@ import { Pencil, Trash2, MoreVertical, Check } from "lucide-react";
 const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
   if (!habit) return null;
 
-  const { isEditableInTracker } = getSettings();
+  const { isEditableInTracker, isColorCoded } = getSettings();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -126,12 +126,14 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
 
   return (
     <tr>
-      <td className={`py-4 font-medium border border-[#333333] ${bgClassMap[habit.color]}`}>
+      <td className={`py-4 font-medium border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>
         <div className="flex items-center justify-between gap-2 pl-3">
-            <div
-              className="min-w-3 min-h-3 rounded-sm"
-              style={{ backgroundColor: colorMap[habit.color] }}
-            />
+            {isColorCoded && (
+              <div
+                className="min-w-3 min-h-3 rounded-sm"
+                style={{ backgroundColor: isColorCoded ? colorMap[habit.color] : "" }}
+              />
+            )}
             <div className="w-[10rem] lg:w-[14rem] truncate">{habit.name}</div>
 
           <div className="relative mr-2" ref={menuRef}>
@@ -173,7 +175,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
           <td
             key={dateStr}
             className={`text-center h-[3rem] border-y border-[#333333] ${
-              isToday ? `${bgClassTodayMap[habit.color]}` : `${bgClassMap[habit.color]}`
+              isToday ? `${isColorCoded ? bgClassTodayMap[habit.color] : "bg-[#1e1e1e]"}` : `${isColorCoded ? bgClassMap[habit.color] : ""}`
             }`}
           >
           <div className="flex justify-center w-[3rem] mx-auto items-center">
@@ -181,13 +183,13 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
               disabled={!isCheckable}
               onClick={() => onToggle(habit.id, dateStr)}
               className={`w-6 h-6 rounded-md border flex items-center justify-center hover:scale-110 disabled:hover:scale-100 transition ${
-                isChecked ? "scale-110" : "border-gray-500"
+                isChecked ? "scale-110 bg-blue-500 border-blue-500" : "border-gray-500"
               } ${isCheckable ? "cursor-pointer" : "opacity-15 cursor-not-allowed"}`}
               style={
                 isChecked
                   ? {
-                      backgroundColor: colorMap[habit.color],
-                      borderColor: colorMap[habit.color],
+                      backgroundColor: isColorCoded ? colorMap[habit.color] : "",
+                      borderColor: isColorCoded ? colorMap[habit.color] : "",
                     }
                   : {}
               }
@@ -199,9 +201,9 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         );
       })}
 
-      <td className={`text-center border border-[#333333] ${bgClassMap[habit.color]}`}>{current}</td>
-      <td className={`text-center border border-[#333333] ${bgClassMap[habit.color]}`}>{longest}</td>
-      <td className={`text-center border border-[#333333] ${bgClassMap[habit.color]}`}>{total}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>{current}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>{longest}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>{total}</td>
     </tr>
   );
 };

@@ -4,7 +4,7 @@ import { daysOfWeek } from "../utils/dateUtils";
 
 const colors = Object.keys(colorMap);
 
-const HabitsForm = ({ onSubmit, habit }) => {
+const HabitsForm = ({ onSubmit, habit, isColorCoded }) => {
   const [formData, setFormData] = useState({
     name: habit?.name || "",
     description: habit?.description || "",
@@ -92,22 +92,24 @@ const HabitsForm = ({ onSubmit, habit }) => {
         </p>
       </div>
       
-      <div>
-        <label className="block mb-1 font-semibold">Color</label>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {colors.map((clr) => (
-            <button
-              key={clr}
-              type="button"
-              onClick={() => handleChange("color", clr)}
-              className={`cursor-pointer w-8 h-8 rounded-full border-4 transition
-                ${formData.color === clr ? "border-white" : "border-transparent"}`}
-              style={{ backgroundColor: colorMap[clr] }}
-              title={clr}
-            />
-          ))}
+      {isColorCoded && (
+        <div>
+          <label className="block mb-1 font-semibold">Color</label>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {colors.map((clr) => (
+              <button
+                key={clr}
+                type="button"
+                onClick={() => handleChange("color", clr)}
+                className={`cursor-pointer w-8 h-8 rounded-full border-4 transition
+                  ${formData.color === clr ? "border-white" : "border-transparent"}`}
+                style={{ backgroundColor: colorMap[clr] }}
+                title={clr}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <button
         type="submit"

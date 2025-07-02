@@ -14,7 +14,7 @@ const HabitTracker = () => {
   const [weekOffset, setWeekOffset] = useState(0);
   const [weekDates, setWeekDates] = useState(getWeekDates(0));
   const [selectableWeeks, setSelectableWeeks] = useState([]);
-  const { trackerStartDate, isEditableInTracker } = getSettings();
+  const { trackerStartDate, isEditableInTracker, isColorCoded } = getSettings();
 
   const {
     habits,
@@ -163,11 +163,11 @@ const HabitTracker = () => {
       </div>
       
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <HabitsForm onSubmit={handleAddOrUpdateHabit} habit={editingHabit} />
-      </Modal>
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <HabitsForm habit={editingHabit} onSubmit={handleAddOrUpdateHabit} />
+        <HabitsForm 
+          onSubmit={handleAddOrUpdateHabit} 
+          habit={editingHabit}
+          isColorCoded={isColorCoded}
+        />
       </Modal>
 
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
