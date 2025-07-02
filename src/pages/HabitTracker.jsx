@@ -110,27 +110,27 @@ const HabitTracker = () => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              <th className="w-[12rem] lg:w-[18rem]">Habits</th>
+              <th className="w-[12rem] lg:w-[18rem] pl-4 border border-gray-600">Habits</th>
               {weekDates.map((date) => {
                 const isToday = formatDate(date) === formatDate(new Date());
 
                 return (
                   <th
                     key={date}
-                    className={`text-center ${
-                      isToday ? "bg-white/5" : "border-transparent"
+                    className={`text-center border-y border-gray-600 ${
+                      isToday ? "bg-white/5" : ""
                     }`}
                   >
-                    <div className="text-sm">
+                    <div className="text-sm mt-2">
                       {date.toLocaleDateString("en-US", { weekday: "short" })}
                     </div>
-                    <div className="text-xs text-gray-400">{date.getDate()}</div>
+                    <div className="text-xs text-gray-400 mb-2">{date.getDate()}</div>
                   </th>
                 );
               })}
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug">Current Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug">Longest Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug">Total Count</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-gray-600">Current Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-gray-600">Longest Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-r border-gray-600">Total Count</th>
             </tr>
           </thead>
           <tbody>
@@ -150,7 +150,7 @@ const HabitTracker = () => {
         {isEditableInTracker && (
           <button
             onClick={openCreateModal}
-            className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+            className="cursor-pointer w-[12rem] lg:w-[18rem] hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded"
           >
             + Add Habit
           </button>

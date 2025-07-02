@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { formatDate, getDayLabel } from "../utils/dateUtils";
 import { getSettings } from "../hooks/useSettings";
-import { colorMap } from "../utils/colors";
+import { colorMap, bgClassMap, bgClassTodayMap } from "../utils/colors";
 import { Pencil, Trash2, MoreVertical } from "lucide-react";
 
 const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
@@ -126,10 +126,10 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
 
   return (
     <tr>
-      <td className="py-4 font-medium">
-        <div className="flex items-center justify-between gap-2">
+      <td className={`py-4 font-medium border border-gray-700 ${bgClassTodayMap[habit.color]}`}>
+        <div className="flex items-center justify-between gap-2 pl-3">
             <div
-              className="min-w-3 min-h-3 rounded-full"
+              className="min-w-3 min-h-3 rounded-sm"
               style={{ backgroundColor: colorMap[habit.color] }}
             />
             <div className="w-[10rem] lg:w-[14rem] truncate">{habit.name}</div>
@@ -172,17 +172,17 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         return (
           <td
             key={dateStr}
-            className={`text-center h-[3rem] ${
-              isToday ? "bg-white/5" : "border-transparent"
+            className={`text-center h-[3rem] border-y border-gray-700 ${
+              isToday ? `${bgClassTodayMap[habit.color]}` : `${bgClassMap[habit.color]}`
             }`}
           >
           <div className="flex justify-center w-[3rem] mx-auto items-center">
             <button
               disabled={!isCheckable}
               onClick={() => onToggle(habit.id, dateStr)}
-              className={`w-6 h-6 rounded border flex items-center justify-center transition ${
+              className={`w-6 h-6 rounded-md border flex items-center justify-center hover:scale-110 transition ${
                 isChecked ? "" : "border-gray-500"
-              } ${isCheckable ? "cursor-pointer" : "opacity-30 cursor-not-allowed"}`}
+              } ${isCheckable ? "cursor-pointer" : "opacity-15 cursor-not-allowed"}`}
               style={
                 isChecked
                   ? {
@@ -199,9 +199,9 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         );
       })}
 
-      <td className="text-center">{current}</td>
-      <td className="text-center">{longest}</td>
-      <td className="text-center">{total}</td>
+      <td className={`text-center border-y border-gray-700 ${bgClassMap[habit.color]}`}>{current}</td>
+      <td className={`text-center border-y border-gray-700 ${bgClassMap[habit.color]}`}>{longest}</td>
+      <td className={`text-center border-y border-r border-gray-700 ${bgClassMap[habit.color]}`}>{total}</td>
     </tr>
   );
 };
