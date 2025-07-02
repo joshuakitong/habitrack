@@ -27,7 +27,7 @@ export default function Settings() {
                 onClick={(e) => e.currentTarget.showPicker()}
                 value={trackerStartDate}
                 onChange={(e) => setTrackerStartDate(e.target.value)}
-                max={new Date().toISOString().split("T")[0]}
+                max={new Date().toLocaleDateString("en-CA")}
                 required
                 className="bg-gray-800 text-sm w-[12rem] text-white p-2 rounded border border-gray-600 hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer 
                 [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:cursor-pointer"
