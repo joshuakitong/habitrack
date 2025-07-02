@@ -8,6 +8,18 @@ import { useHabitManager } from "../hooks/useHabitManager";
 import { getSettings } from "../hooks/useSettings";
 import { startOfDay, startOfWeek, addWeeks } from "date-fns";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 const HabitTracker = () => {
   const hasMounted = useRef(false);
@@ -70,6 +82,18 @@ const HabitTracker = () => {
     }
   }, [habits]);
 
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = habits.findIndex(h => h.id === active.id);
+    const newIndex = habits.findIndex(h => h.id === over.id);
+    const newHabits = arrayMove(habits, oldIndex, newIndex);
+    setHabits(newHabits);
+  };
+
   return (
     <div className="py-6 px-2 text-white">
       <div className="flex w-full items-center justify-between">
@@ -86,8 +110,8 @@ const HabitTracker = () => {
               ))}
             </select>
             <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-400">
-            <ChevronDown size={16} />
-          </div>
+              <ChevronDown size={16} />
+            </div>
           </div>
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
@@ -107,59 +131,54 @@ const HabitTracker = () => {
       </div>
 
       <div className="overflow-x-auto mt-4">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr>
-              <th className="w-[12rem] lg:w-[18rem] pl-4 border border-[#333333] bg-[#1e1e1e]">Habits</th>
-              {weekDates.map((date) => {
-                const isToday = formatDate(date) === formatDate(new Date());
-
-                return (
-                  <th
-                    key={date}
-                    className={`text-center border-y border-[#333333] bg-[#1e1e1e] ${
-                      isToday ? "bg-[#353535]" : ""
-                    }`}
-                  >
-                    <div className="text-sm mt-2">
-                      {date.toLocaleDateString("en-US", { weekday: "short" })}
-                    </div>
-                    <div className="text-xs text-gray-400 mb-2">{date.getDate()}</div>
-                  </th>
-                );
-              })}
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Current Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Longest Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Total Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            {habits.map((habit) => (
-              <HabitRow
-                key={habit.id}
-                habit={habit}
-                weekDates={weekDates}
-                onToggle={toggleCheck}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                trackerStartDate={trackerStartDate}
-              />
-            ))}
-
-            {isEditableInTracker && (
-              <tr>
-                <td className="text-center">
-                  <button
-                    onClick={openCreateModal}
-                    className="text-white font-semibold py-2 px-4 hover:bg-[#1e1e1e] w-full cursor-pointer"
-                  >
-                    + Add Habit
-                  </button>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={habits.map(h => h.id)} strategy={verticalListSortingStrategy}>
+            <table className="w-full text-left border-collapse overflow-hidden">
+              <thead>
+                <tr>
+                  <th className="w-[12rem] lg:w-[18rem] pl-4 border border-[#333333] bg-[#1e1e1e]">Habits</th>
+                  {weekDates.map((date) => {
+                    const isToday = formatDate(date) === formatDate(new Date());
+                    return (
+                      <th key={date} className={`text-center border-y border-[#333333] bg-[#1e1e1e] ${isToday ? "bg-[#353535]" : ""}`}>
+                        <div className="text-sm mt-2">{date.toLocaleDateString("en-US", { weekday: "short" })}</div>
+                        <div className="text-xs text-gray-400 mb-2">{date.getDate()}</div>
+                      </th>
+                    );
+                  })}
+                  <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Current Streak</th>
+                  <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Longest Streak</th>
+                  <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Total Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                {habits.map((habit) => (
+                  <HabitRow
+                    key={habit.id}
+                    habit={habit}
+                    weekDates={weekDates}
+                    onToggle={toggleCheck}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    trackerStartDate={trackerStartDate}
+                  />
+                ))}
+                {isEditableInTracker && (
+                  <tr>
+                    <td className="text-center">
+                      <button
+                        onClick={openCreateModal}
+                        className="text-white font-semibold py-2 px-4 hover:bg-[#1e1e1e] w-full cursor-pointer"
+                      >
+                        + Add Habit
+                      </button>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </SortableContext>
+        </DndContext>
       </div>
       
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
