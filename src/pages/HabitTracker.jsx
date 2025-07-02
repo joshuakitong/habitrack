@@ -128,7 +128,7 @@ const HabitTracker = () => {
                   </th>
                 );
               })}
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-gray-600">Current Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/50 border-y border-gray-600">Current Streak</th>
               <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-gray-600">Longest Streak</th>
               <th className="text-center text-xs font-normal w-[3rem] leading-snug border-y border-r border-gray-600">Total Count</th>
             </tr>
@@ -145,16 +145,21 @@ const HabitTracker = () => {
                 trackerStartDate={trackerStartDate}
               />
             ))}
+
+            {isEditableInTracker && (
+              <tr>
+                <td className="text-center">
+                  <button
+                    onClick={openCreateModal}
+                    className="text-white font-semibold py-2 px-4 hover:bg-gray-700 w-full cursor-pointer"
+                  >
+                    + Add Habit
+                  </button>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
-        {isEditableInTracker && (
-          <button
-            onClick={openCreateModal}
-            className="cursor-pointer w-[12rem] lg:w-[18rem] hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded"
-          >
-            + Add Habit
-          </button>
-        )}
       </div>
       
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
