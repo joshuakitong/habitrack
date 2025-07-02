@@ -8,7 +8,7 @@ import Settings from "./pages/Settings";
 function App() {
   return (
     <Router>
-      <div className="bg-gray-800 min-h-screen">
+      <div className="bg-[#121212] min-h-screen">
         <div className="max-w-5xl mx-auto">
           <Navbar />
           <Routes>

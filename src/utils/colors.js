@@ -1,26 +1,26 @@
 export const colorMap = {
-  red: "#e11d48",
+  red: "#ef4444",
   orange: "#f97316",
   yellow: "#eab308",
-  green: "#10b981",
+  green: "#22c55e",
   blue: "#3b82f6",
   purple: "#8b5cf6",
 };
 
 export const bgClassMap = {
-  red: "bg-red-500/10",
-  orange: "bg-orange-500/10",
-  yellow: "bg-yellow-500/10",
-  green: "bg-green-500/10",
-  blue: "bg-blue-500/10",
-  purple: "bg-purple-500/10",
+  red: "bg-[#310d0d]",
+  orange: "bg-[#321406]",
+  yellow: "bg-[#312601]",
+  green: "bg-[#092817]",
+  blue: "bg-[#0b1a4c]",
+  purple: "bg-[#1b113c]",
 };
 
 export const bgClassTodayMap = {
-  red: "bg-red-500/15",
-  orange: "bg-orange-500/15",
-  yellow: "bg-yellow-500/15",
-  green: "bg-green-500/15",
-  blue: "bg-blue-500/15",
-  purple: "bg-purple-500/15",
+  red: "bg-[#4d1515]",
+  orange: "bg-[#4c2207]",
+  yellow: "bg-[#4a3a01]",
+  green: "bg-[#0a3c1d]",
+  blue: "bg-[#11294b]",
+  purple: "bg-[#2b1c4b]",
 };

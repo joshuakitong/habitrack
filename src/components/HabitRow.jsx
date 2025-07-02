@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { formatDate, getDayLabel } from "../utils/dateUtils";
 import { getSettings } from "../hooks/useSettings";
 import { colorMap, bgClassMap, bgClassTodayMap } from "../utils/colors";
-import { Pencil, Trash2, MoreVertical } from "lucide-react";
+import { Pencil, Trash2, MoreVertical, Check } from "lucide-react";
 
 const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
   if (!habit) return null;
@@ -126,7 +126,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
 
   return (
     <tr>
-      <td className={`py-4 font-medium border border-gray-700 ${bgClassTodayMap[habit.color]}`}>
+      <td className={`py-4 font-medium border border-[#333333] ${bgClassTodayMap[habit.color]}`}>
         <div className="flex items-center justify-between gap-2 pl-3">
             <div
               className="min-w-3 min-h-3 rounded-sm"
@@ -137,7 +137,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
           <div className="relative mr-2" ref={menuRef}>
             {isEditableInTracker && (
               <button
-                className="text-gray-300 hover:text-white p-1 cursor-pointer"
+                className="text-white hover:text-gray-300 p-1 cursor-pointer"
                 onClick={() => setMenuOpen((prev) => !prev)}
               >
                 <MoreVertical size={18} />
@@ -145,12 +145,12 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
             )}
 
             {menuOpen && (
-              <div className="absolute right-0 mt-[-1.95rem] w-28 bg-gray-800 border border-gray-600 rounded shadow z-10">
+              <div className="absolute right-0 mt-[-1.95rem] w-28 bg-[#1e1e1e] border border-[#333333] rounded shadow z-10">
                 <div className="flex justify-center gap-2">
-                  <button onClick={() => onEdit(habit)} className="block w-full text-left px-4 py-2 hover:bg-gray-700 text-blue-400 hover:text-blue-300 cursor-pointer">
+                  <button onClick={() => onEdit(habit)} className="block w-full text-left px-4 py-2 text-blue-500 hover:text-blue-400 cursor-pointer">
                     <Pencil size={16} />
                   </button>
-                  <button onClick={() => onDelete(habit)} className="block w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400 hover:text-red-300 cursor-pointer">
+                  <button onClick={() => onDelete(habit)} className="block w-full text-left px-4 py-2 text-red-500 hover:text-red-400 cursor-pointer">
                     <Trash2 size={16} />
                   </button>
                 </div>
@@ -172,7 +172,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         return (
           <td
             key={dateStr}
-            className={`text-center h-[3rem] border-y border-gray-700 ${
+            className={`text-center h-[3rem] border-y border-[#333333] ${
               isToday ? `${bgClassTodayMap[habit.color]}` : `${bgClassMap[habit.color]}`
             }`}
           >
@@ -180,8 +180,8 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
             <button
               disabled={!isCheckable}
               onClick={() => onToggle(habit.id, dateStr)}
-              className={`w-6 h-6 rounded-md border flex items-center justify-center hover:scale-110 transition ${
-                isChecked ? "" : "border-gray-500"
+              className={`w-6 h-6 rounded-md border flex items-center justify-center hover:scale-110 disabled:hover:scale-100 transition ${
+                isChecked ? "scale-110" : "border-gray-500"
               } ${isCheckable ? "cursor-pointer" : "opacity-15 cursor-not-allowed"}`}
               style={
                 isChecked
@@ -192,16 +192,16 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
                   : {}
               }
             >
-              {isChecked && <span className="text-white text-sm font-bold">✓</span>}
+              {isChecked && <span className="text-white text-sm font-bold"><Check size={18} /></span>}
             </button>
           </div>
         </td>
         );
       })}
 
-      <td className={`text-center border-y border-gray-700 ${bgClassMap[habit.color]}`}>{current}</td>
-      <td className={`text-center border-y border-gray-700 ${bgClassMap[habit.color]}`}>{longest}</td>
-      <td className={`text-center border-y border-r border-gray-700 ${bgClassMap[habit.color]}`}>{total}</td>
+      <td className={`text-center border-y border-[#333333] ${bgClassMap[habit.color]}`}>{current}</td>
+      <td className={`text-center border-y border-[#333333] ${bgClassMap[habit.color]}`}>{longest}</td>
+      <td className={`text-center border-y border-r border-[#333333] ${bgClassMap[habit.color]}`}>{total}</td>
     </tr>
   );
 };

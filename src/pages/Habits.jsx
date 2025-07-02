@@ -5,7 +5,6 @@ import { colorMap } from "../utils/colors";
 import { useHabitManager } from "../hooks/useHabitManager";
 import { Pencil, Trash2 } from "lucide-react";
 
-
 const Habits = () => {
   const {
     habits,
@@ -33,12 +32,12 @@ const Habits = () => {
           {habits.map((habit) => (
             <li
               key={habit.id}
-              className="bg-gray-700 p-4 rounded shadow flex justify-between items-start"
+              className="bg-[#1e1e1e] p-4 rounded shadow flex justify-between items-start"
             >
               <div>
                 <div className="flex items-center gap-2">
                   <div
-                    className="w-3 h-3 rounded-full"
+                    className="w-3 h-3 rounded-sm"
                     style={{ backgroundColor: colorMap[habit.color] }}
                   />
                   <p className="font-semibold">{habit.name}</p>
@@ -54,10 +53,10 @@ const Habits = () => {
               </div>
               <div className="flex gap-3">
                 <div className="flex justify-center gap-2">
-                  <button onClick={() => handleEdit(habit)} className="text-blue-400 hover:text-blue-300 cursor-pointer">
+                  <button onClick={() => handleEdit(habit)} className="text-blue-500 hover:text-blue-400 cursor-pointer">
                     <Pencil size={16} />
                   </button>
-                  <button onClick={() => handleDelete(habit)} className="text-red-400 hover:text-red-300 cursor-pointer">
+                  <button onClick={() => handleDelete(habit)} className="text-red-500 hover:text-red-400 cursor-pointer">
                     <Trash2 size={16} />
                   </button>
                 </div>

@@ -8,13 +8,13 @@ const ConfirmDelete = ({ itemName = "this item", onConfirm, onCancel }) => {
       <div className="flex justify-center gap-4">
         <button
           onClick={onConfirm}
-          className="cursor-pointer bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-semibold"
+          className="cursor-pointer bg-red-500 hover:bg-red-600 px-4 py-2 rounded font-semibold"
         >
           Delete
         </button>
         <button
           onClick={onCancel}
-          className="cursor-pointer bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded font-semibold"
+          className="cursor-pointer bg-gray-500 hover:bg-gray-600 px-4 py-2 rounded font-semibold"
         >
           Cancel
         </button>

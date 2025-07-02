@@ -50,7 +50,7 @@ const HabitsForm = ({ onSubmit, habit }) => {
           value={formData.name}
           maxLength={64}
           onChange={(e) => handleChange("name", e.target.value)}
-          className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 rounded bg-[#121212] border border-[#333333] focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
       </div>
@@ -61,7 +61,7 @@ const HabitsForm = ({ onSubmit, habit }) => {
           value={formData.description}
           maxLength={500}
           onChange={(e) => handleChange("description", e.target.value)}
-          className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 rounded bg-[#121212] border border-[#333333] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <p className="text-xs text-gray-400 text-right">
           {formData.description.length}/500 characters
@@ -79,8 +79,8 @@ const HabitsForm = ({ onSubmit, habit }) => {
               className={`cursor-pointer px-3 py-1 rounded-full text-sm border 
                 ${
                   formData.days.includes(day)
-                    ? "bg-blue-500 border-blue-500 text-white"
-                    : "bg-gray-700 border-gray-600 text-gray-300"
+                    ? "bg-blue-500 border-blue-400 text-white"
+                    : "bg-[#121212] border-[#333333] text-gray-300"
                 }`}
             >
               {day}

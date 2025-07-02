@@ -7,7 +7,7 @@ import ConfirmDelete from "../components/ConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
 import { getSettings } from "../hooks/useSettings";
 import { startOfDay, startOfWeek, addWeeks } from "date-fns";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 const HabitTracker = () => {
   const hasMounted = useRef(false);
@@ -79,7 +79,7 @@ const HabitTracker = () => {
             <select
               value={weekOffset}
               onChange={(e) => setWeekOffset(parseInt(e.target.value))}
-              className="bg-gray-800 text-sm text-white p-2 pl-4 pr-10 rounded border border-gray-600 hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+              className="bg-[#1e1e1e] text-sm text-white p-2 pl-4 pr-10 rounded border border-[#333333] hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
             >
               {selectableWeeks.map(({ label, offset }) => (
                 <option key={offset} value={offset}>{label}</option>
@@ -91,17 +91,17 @@ const HabitTracker = () => {
           </div>
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
-            className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#1e1e1e] border border-[#333333] px-3 py-1 rounded cursor-pointer hover:border-blue-500 focus:border-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!isBeforeTrackerStart}
           >
-            ←
+            <ChevronLeft size={16} />
           </button>
           <button
             onClick={() => setWeekOffset((prev) => prev + 1)}
-            className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#1e1e1e] border border-[#333333] px-3 py-1 rounded cursor-pointer hover:border-blue-500 focus:border-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLastDate}
           >
-            →
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>
@@ -110,15 +110,15 @@ const HabitTracker = () => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              <th className="w-[12rem] lg:w-[18rem] pl-4 border border-gray-600 bg-gray-900/25">Habits</th>
+              <th className="w-[12rem] lg:w-[18rem] pl-4 border border-[#333333] bg-[#1e1e1e]">Habits</th>
               {weekDates.map((date) => {
                 const isToday = formatDate(date) === formatDate(new Date());
 
                 return (
                   <th
                     key={date}
-                    className={`text-center border-y border-gray-600 bg-gray-900/10 ${
-                      isToday ? "bg-gray-900/25" : ""
+                    className={`text-center border-y border-[#333333] bg-[#1e1e1e] ${
+                      isToday ? "bg-[#353535]" : ""
                     }`}
                   >
                     <div className="text-sm mt-2">
@@ -128,9 +128,9 @@ const HabitTracker = () => {
                   </th>
                 );
               })}
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/10 border-y border-gray-600">Current Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/10 border-y border-gray-600">Longest Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-gray-900/10 border-y border-r border-gray-600">Total Count</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border-y border-[#333333]">Current Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border-y border-[#333333]">Longest Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border-y border-r border-[#333333]">Total Count</th>
             </tr>
           </thead>
           <tbody>
@@ -151,7 +151,7 @@ const HabitTracker = () => {
                 <td className="text-center">
                   <button
                     onClick={openCreateModal}
-                    className="text-white font-semibold py-2 px-4 hover:bg-gray-700 w-full cursor-pointer"
+                    className="text-white font-semibold py-2 px-4 hover:bg-[#1e1e1e] w-full cursor-pointer"
                   >
                     + Add Habit
                   </button>
