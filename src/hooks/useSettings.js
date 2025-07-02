@@ -8,6 +8,7 @@ export function getSettings() {
     trackerStartDate: stored.trackerStartDate ?? getDefaultTrackerStartDate(),
     isEditableInTracker: stored.isEditableInTracker ?? true,
     isColorCoded: stored.isColorCoded ?? true,
+    isRowColored: stored.isRowColored ?? true,
   };
 }
 

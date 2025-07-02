@@ -7,7 +7,7 @@ import { Pencil, Trash2, MoreVertical, Check } from "lucide-react";
 const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
   if (!habit) return null;
 
-  const { isEditableInTracker, isColorCoded } = getSettings();
+  const { isEditableInTracker, isColorCoded, isRowColored } = getSettings();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -126,7 +126,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
 
   return (
     <tr>
-      <td className={`py-4 font-medium border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>
+      <td className={`py-4 font-medium border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>
         <div className="flex items-center justify-between gap-2 pl-3">
             {isColorCoded && (
               <div
@@ -175,7 +175,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
           <td
             key={dateStr}
             className={`text-center h-[3rem] border-y border-[#333333] ${
-              isToday ? `${isColorCoded ? bgClassTodayMap[habit.color] : "bg-[#1e1e1e]"}` : `${isColorCoded ? bgClassMap[habit.color] : ""}`
+              isToday ? `${isColorCoded && isRowColored ? bgClassTodayMap[habit.color] : "bg-[#1e1e1e]"}` : `${isColorCoded  && isRowColored ? bgClassMap[habit.color] : ""}`
             }`}
           >
           <div className="flex justify-center w-[3rem] mx-auto items-center">
@@ -201,9 +201,9 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         );
       })}
 
-      <td className={`text-center border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>{current}</td>
-      <td className={`text-center border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>{longest}</td>
-      <td className={`text-center border border-[#333333] ${isColorCoded ? bgClassMap[habit.color] : ""}`}>{total}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>{current}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>{longest}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>{total}</td>
     </tr>
   );
 };
