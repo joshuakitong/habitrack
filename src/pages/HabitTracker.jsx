@@ -128,9 +128,9 @@ const HabitTracker = () => {
                   </th>
                 );
               })}
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border-y border-[#333333]">Current Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border-y border-[#333333]">Longest Streak</th>
-              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border-y border-r border-[#333333]">Total Count</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Current Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Longest Streak</th>
+              <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">Total Count</th>
             </tr>
           </thead>
           <tbody>

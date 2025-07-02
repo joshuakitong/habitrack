@@ -199,9 +199,9 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete }) => {
         );
       })}
 
-      <td className={`text-center border-y border-[#333333] ${bgClassMap[habit.color]}`}>{current}</td>
-      <td className={`text-center border-y border-[#333333] ${bgClassMap[habit.color]}`}>{longest}</td>
-      <td className={`text-center border-y border-r border-[#333333] ${bgClassMap[habit.color]}`}>{total}</td>
+      <td className={`text-center border border-[#333333] ${bgClassMap[habit.color]}`}>{current}</td>
+      <td className={`text-center border border-[#333333] ${bgClassMap[habit.color]}`}>{longest}</td>
+      <td className={`text-center border border-[#333333] ${bgClassMap[habit.color]}`}>{total}</td>
     </tr>
   );
 };
