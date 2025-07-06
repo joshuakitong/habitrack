@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getSettings, saveSettings } from "../hooks/useSettings";
+import SwitchButton from "../components/settings/SwitchButton";
 
 export default function Settings() {
   const { 
@@ -51,60 +52,18 @@ export default function Settings() {
 
             <div className="flex items-center justify-between">
               <label htmlFor="editableToggle">Enable Editing in Tracker</label>
-              <div className="flex items-center">
-                <label htmlFor="editableToggle" className="relative inline-block w-11 h-6 cursor-pointer">
-                  <input
-                    id="editableToggle"
-                    type="checkbox"
-                    checked={isEditableInTracker}
-                    onChange={() => setIsEditableInTracker((prev) => !prev)}
-                    className="sr-only peer"
-                  />
-                  <div className="absolute inset-0 bg-gray-600 rounded-full peer-checked:bg-blue-500 transition-colors duration-300"></div>
-                  <div
-                    className="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"
-                  ></div>
-                </label>
-              </div>
+              <SwitchButton id="editableToggle" checked={isEditableInTracker} onChange={setIsEditableInTracker} />
             </div>
 
             <div className="flex items-center justify-between">
               <label htmlFor="colorCodedToggle">Color Coded Habits</label>
-              <div className="flex items-center">
-                <label htmlFor="colorCodedToggle" className="relative inline-block w-11 h-6 cursor-pointer">
-                  <input
-                    id="colorCodedToggle"
-                    type="checkbox"
-                    checked={isColorCoded}
-                    onChange={() => setIsColorCoded((prev) => !prev)}
-                    className="sr-only peer"
-                  />
-                  <div className="absolute inset-0 bg-gray-600 rounded-full peer-checked:bg-blue-500 transition-colors duration-300"></div>
-                  <div
-                    className="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"
-                  ></div>
-                </label>
-              </div>
+              <SwitchButton id="colorCodedToggle" checked={isColorCoded} onChange={setIsColorCoded} />
             </div>
 
             {isColorCoded &&(
               <div className="flex items-center justify-between">
                 <label htmlFor="rowColored">Colored Rows</label>
-                <div className="flex items-center">
-                  <label htmlFor="rowColored" className="relative inline-block w-11 h-6 cursor-pointer">
-                    <input
-                      id="rowColored"
-                      type="checkbox"
-                      checked={isRowColored}
-                      onChange={() => setIsRowColored((prev) => !prev)}
-                      className="sr-only peer"
-                    />
-                    <div className="absolute inset-0 bg-gray-600 rounded-full peer-checked:bg-blue-500 transition-colors duration-300"></div>
-                    <div
-                      className="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"
-                    ></div>
-                  </label>
-                </div>
+                <SwitchButton id="rowColored" checked={isRowColored} onChange={setIsRowColored} />
               </div>
             )}
         </div>

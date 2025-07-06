@@ -6,22 +6,8 @@ import { getSettings } from "../hooks/useSettings";
 import { colorMap } from "../utils/colors";
 import { useHabitManager } from "../hooks/useHabitManager";
 import { Pencil, Trash2, GripVertical } from "lucide-react";
-
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  TouchSensor,
-  MouseSensor
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import SortableWrapper from "../components/dnd/SortableWrapper";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 const SortableHabit = ({ habit, isColorCoded, handleEdit, handleDelete }) => {
@@ -124,22 +110,6 @@ const Habits = () => {
     localStorage.setItem("habits", JSON.stringify(habits));
   }, [habits]);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(TouchSensor),
-    useSensor(MouseSensor)
-  );
-
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = habits.findIndex((h) => h.id === active.id);
-    const newIndex = habits.findIndex((h) => h.id === over.id);
-    const newHabits = arrayMove(habits, oldIndex, newIndex);
-    setHabits(newHabits);
-  };
-
   return (
     <div className="py-4 px-4 lg:px-42 text-white">
       <h1 className="text-2xl font-bold mb-4">Your Habits</h1>
@@ -147,21 +117,22 @@ const Habits = () => {
       {habits.length === 0 ? (
         <p className="text-gray-400">No habits yet. Add your first one below.</p>
       ) : (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={habits.map((h) => h.id)} strategy={verticalListSortingStrategy}>
-            <ul className="space-y-4">
-              {habits.map((habit) => (
-                <SortableHabit
-                  key={habit.id}
-                  habit={habit}
-                  isColorCoded={isColorCoded}
-                  handleEdit={handleEdit}
-                  handleDelete={handleDelete}
-                />
-              ))}
-            </ul>
-          </SortableContext>
-        </DndContext>
+        <SortableWrapper items={habits.map(h => h.id)} onReorder={(newOrder) => {
+          const newHabits = newOrder.map(id => habits.find(h => h.id === id));
+          setHabits(newHabits);
+        }}>
+          <ul className="space-y-4">
+            {habits.map((habit) => (
+              <SortableHabit
+                key={habit.id}
+                habit={habit}
+                isColorCoded={isColorCoded}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
+            ))}
+          </ul>
+        </SortableWrapper>
       )}
 
       <div className="mt-4">
