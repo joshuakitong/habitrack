@@ -48,8 +48,8 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
     if (checked.length === 0) return { current: 0, longest: 0, total: 0 };
 
     const checkedSet = new Set(checked.map((d) => formatDate(d)));
-    const total = [...checkedSet].filter((dStr) => {
-      const [y, m, d] = dStr.split("-").map(Number);
+    const total = [...checkedSet].filter((dateStr) => {
+      const [y, m, d] = dateStr.split("-").map(Number);
       const date = new Date(y, m - 1, d);
       return activeDays.includes(getDayLabel(date));
     }).length;

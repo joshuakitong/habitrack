@@ -14,6 +14,8 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  TouchSensor,
+  MouseSensor
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -82,7 +84,11 @@ const HabitTracker = () => {
     }
   }, [habits]);
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor),
+    useSensor(MouseSensor)
+  );
 
   const handleDragEnd = (event) => {
     const { active, over } = event;

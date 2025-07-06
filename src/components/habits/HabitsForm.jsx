@@ -69,7 +69,7 @@ const HabitsForm = ({ onSubmit, habit, isColorCoded }) => {
       </div>
 
       <div>
-        <label className="block mb-2 font-medium">Repeat On</label>
+        <label className="block mb-2 font-medium">Active Days</label>
         <div className="flex gap-2 flex-wrap">
           {daysOfWeek.map((day) => (
             <button
