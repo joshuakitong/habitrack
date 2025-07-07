@@ -5,6 +5,7 @@ import { formatDate, getDayLabel } from "../../utils/dateUtils";
 import { getSettings } from "../../hooks/useSettings";
 import { colorMap, bgClassMap, bgClassTodayMap } from "../../utils/colors";
 import { Pencil, Trash2, MoreVertical, Check, GripVertical } from "lucide-react";
+import { getStreaks } from "../../utils/getStreaks";
 
 const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDate }) => {
   if (!habit) return null;
@@ -28,98 +29,6 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-  };
-
-  const getStreaks = (habit) => {
-    if (!habit || typeof habit !== "object") return { current: 0, longest: 0, total: 0 };
-
-    const checkedDates = habit.checkedDates || {};
-    const activeDays =
-      habit.days && habit.days.length > 0 ? habit.days : getDayLabel;
-
-    const checked = Object.keys(checkedDates)
-      .filter((dateStr) => checkedDates[dateStr])
-      .map((dateStr) => {
-        const [y, m, d] = dateStr.split("-").map(Number);
-        return new Date(y, m - 1, d);
-      })
-      .sort((a, b) => a - b);
-
-    if (checked.length === 0) return { current: 0, longest: 0, total: 0 };
-
-    const checkedSet = new Set(checked.map((d) => formatDate(d)));
-    const total = [...checkedSet].filter((dateStr) => {
-      const [y, m, d] = dateStr.split("-").map(Number);
-      const date = new Date(y, m - 1, d);
-      return activeDays.includes(getDayLabel(date));
-    }).length;
-
-    const start = new Date(checked[0]);
-    const end = new Date(checked[checked.length - 1]);
-
-    let current = 0;
-    let longest = 0;
-    let streak = 0;
-
-    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
-      const dayLabel = getDayLabel(date);
-      const dateStr = formatDate(date);
-
-      if (activeDays.includes(dayLabel)) {
-        if (checkedSet.has(dateStr)) {
-          streak++;
-          longest = Math.max(longest, streak);
-        } else {
-          streak = 0;
-        }
-      }
-    }
-
-    const recentCheckableDays = [];
-    let cursor = new Date();
-    cursor.setHours(0, 0, 0, 0);
-
-    cursor.setDate(cursor.getDate());
-
-    while (recentCheckableDays.length < 2) {
-      const dayLabel = getDayLabel(cursor);
-      const dateStr = formatDate(cursor);
-
-      if (activeDays.includes(dayLabel)) {
-        recentCheckableDays.push({
-          dateStr,
-          isChecked: checkedSet.has(dateStr),
-        });
-      }
-
-      if (checked.length > 0 && cursor < checked[0]) break;
-
-      cursor.setDate(cursor.getDate() - 1);
-    }
-
-    if (
-      recentCheckableDays.length === 2 &&
-      !recentCheckableDays[0].isChecked &&
-      !recentCheckableDays[1].isChecked
-    ) {
-      return { current: 0, longest, total };
-    }
-
-    current = 0;
-    for (let date = new Date(end); date >= start; date.setDate(date.getDate() - 1)) {
-      const dayLabel = getDayLabel(date);
-      const dateStr = formatDate(date);
-
-      if (activeDays.includes(dayLabel)) {
-        if (checkedSet.has(dateStr)) {
-          current++;
-        } else {
-          break;
-        }
-      }
-    }
-
-    return { current, longest, total };
   };
 
   const { current, longest, total } = getStreaks(habit);
