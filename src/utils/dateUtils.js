@@ -1,4 +1,4 @@
-import { startOfWeek, format, differenceInCalendarWeeks, addWeeks } from "date-fns";
+import { startOfWeek, format, differenceInCalendarWeeks, addWeeks, parseISO } from "date-fns";
 import { getSettings } from "../hooks/useSettings";
 
 export function getWeekDates(offset = 0) {
@@ -48,6 +48,32 @@ export const buildSelectableWeeks = () => {
 
   return selectableWeeks.reverse(); 
 };
+
+export const sortedDays = (unsortedDays) =>
+  [...unsortedDays].sort(
+    (a, b) => daysOfWeek.indexOf(a) - daysOfWeek.indexOf(b)
+);
+
+export function getActiveDaysForDate(habit, date) {
+  if (!habit || !date || isNaN(date.getTime())) return [];
+
+  const currentWeek = startOfWeek(date, { weekStartsOn: 0 });
+
+  if (!habit.dayOverrides || Object.keys(habit.dayOverrides).length === 0) {
+    return habit.days || [];
+  }
+
+  const overrides = Object.keys(habit.dayOverrides)
+    .map((d) => ({ week: parseISO(d), days: habit.dayOverrides[d] }))
+    .filter(({ week }) => week <= currentWeek)
+    .sort((a, b) => b.week - a.week);
+
+  if (overrides.length > 0) {
+    return overrides[0].days;
+  }
+
+  return habit.days || [];
+}
 
 export function formatDate(date) {
   const y = date.getFullYear();

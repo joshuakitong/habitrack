@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { colorMap } from "../../utils/colors";
-import { daysOfWeek } from "../../utils/dateUtils";
+import { daysOfWeek, sortedDays } from "../../utils/dateUtils";
+import { format, startOfWeek } from "date-fns";
+import SwitchButton from "../../components/settings/SwitchButton";
 
 const colors = Object.keys(colorMap);
 
@@ -31,7 +33,9 @@ const HabitsForm = ({ onSubmit, habit, isColorCoded }) => {
 
     const finalData = {
       ...formData,
-      days: formData.days.length === 0 ? [...daysOfWeek] : formData.days,
+      days: sortedDays(
+            formData.days.length === 0 ? [...daysOfWeek] : formData.days
+          ),
       isChecked: false,
     };
 
