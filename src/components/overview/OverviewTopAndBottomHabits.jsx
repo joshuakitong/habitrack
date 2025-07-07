@@ -136,7 +136,7 @@ const OverviewTopAndBottomHabits = ({ habits }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white mt-4">
           {renderList("Least Completions", bottomByCount)}
-          {renderList("Lower Completion Rate", bottomByCompletion, "%")}
+          {renderList("Lowest Completion Rate", bottomByCompletion, "%")}
           {renderList("Shortest Current Streak", bottomByCurrentStreak)}
           {renderList("Shortest All-time Streak", bottomByLongestStreak)}
         </div>
