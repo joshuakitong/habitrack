@@ -67,7 +67,7 @@ const OverviewHeatMap = ({ habits }) => {
 
   return (
     <div className="bg-[#1e1e1e] p-4 rounded shadow">
-      <h2 className="text-xl mb-4 text-center">Habits Heat Map</h2>
+      <h2 className="text-lg mb-4 font-semibold text-center">Habits Heat Map</h2>
       <div className="flex w-full gap-[2px] overflow-x-auto text-white">
         {months.map(({ key, label, weeks }, idx) => (
           <React.Fragment key={key}>
