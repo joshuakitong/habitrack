@@ -21,7 +21,7 @@ export const buildSelectableWeeks = () => {
   const todayStart = startOfWeek(today, { weekStartsOn: 0 });
 
   const { trackerStartDate } = getSettings();
-  const earliestDate = startOfWeek(new Date(trackerStartDate), { weekStartsOn: 0 });
+  const earliestDate = startOfWeek(parseISO(trackerStartDate), { weekStartsOn: 0 });
   const latestDate = todayStart;
 
   const selectableWeeks = [];

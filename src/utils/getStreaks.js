@@ -1,17 +1,19 @@
 import { formatDate, getDayLabel, getActiveDaysForDate } from "../utils/dateUtils";
+import { parseISO } from "date-fns";
 
-export const getStreaks = (habit) => {
+export const getStreaks = (habit, trackerStartDate) => {
   if (!habit || typeof habit !== "object") return { current: 0, longest: 0, total: 0 };
 
+  const startLimit = parseISO(trackerStartDate);
   const checkedDates = habit.checkedDates || {};
 
-  // Step 1: Get all checked dates, sorted
+  // Step 1: Get all checked dates after trackerStartDate, sorted
   const checked = Object.keys(checkedDates)
-    .filter((dateStr) => checkedDates[dateStr])
-    .map((dateStr) => {
-      const [y, m, d] = dateStr.split("-").map(Number);
-      return new Date(y, m - 1, d);
+    .filter((dateStr) => {
+      const date = new Date(dateStr);
+      return checkedDates[dateStr] && date >= startLimit;
     })
+    .map((dateStr) => new Date(dateStr))
     .sort((a, b) => a - b);
 
   if (checked.length === 0) return { current: 0, longest: 0, total: 0 };
@@ -24,12 +26,13 @@ export const getStreaks = (habit) => {
     return activeDays.includes(getDayLabel(date));
   }).length;
 
-  const start = new Date(checked[0]);
-  const end = new Date(checked[checked.length - 1]);
+  const start = new Date(startLimit);
+  const end = new Date();
 
   // Step 3: Find longest streak
   let longest = 0;
   let streak = 0;
+
   for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
     const dayLabel = getDayLabel(date);
     const dateStr = formatDate(date);
@@ -45,12 +48,14 @@ export const getStreaks = (habit) => {
     }
   }
 
-  // Step 4: Check last 2 recent checkable days
+  // Step 4: Check last 2 recent checkable days (from today backward)
   const recentCheckableDays = [];
   let cursor = new Date();
   cursor.setHours(0, 0, 0, 0);
 
   while (recentCheckableDays.length < 2) {
+    if (cursor < startLimit) break;
+
     const dayLabel = getDayLabel(cursor);
     const dateStr = formatDate(cursor);
     const activeDays = getActiveDaysForDate(habit, cursor);
@@ -61,8 +66,6 @@ export const getStreaks = (habit) => {
         isChecked: checkedSet.has(dateStr),
       });
     }
-
-    if (checked.length > 0 && cursor < checked[0]) break;
 
     cursor.setDate(cursor.getDate() - 1);
   }
@@ -75,9 +78,10 @@ export const getStreaks = (habit) => {
     return { current: 0, longest, total };
   }
 
-  // Step 5: Find current streak (go backward from end)
+  // Step 5: Find current streak (backward from today)
   let current = 0;
-  for (let date = new Date(end); date >= start; date.setDate(date.getDate() - 1)) {
+
+  for (let date = new Date(); date >= start; date.setDate(date.getDate() - 1)) {
     const dayLabel = getDayLabel(date);
     const dateStr = formatDate(date);
     const activeDays = getActiveDaysForDate(habit, date);

@@ -6,6 +6,7 @@ import { getSettings } from "../../hooks/useSettings";
 import { colorMap, bgClassMap, bgClassTodayMap } from "../../utils/colors";
 import { Pencil, Trash2, MoreVertical, Check, GripVertical } from "lucide-react";
 import { getStreaks } from "../../utils/getStreaks";
+import { parseISO } from "date-fns";
 
 const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDate }) => {
   if (!habit) return null;
@@ -31,7 +32,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
     transition,
   };
 
-  const { current, longest, total } = getStreaks(habit);
+  const { current, longest, total } = getStreaks(habit, trackerStartDate);
 
   return (
     <tr ref={setNodeRef} style={style} {...attributes}>
@@ -84,7 +85,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
         const isChecked = habit.checkedDates?.[dateStr] || false;
         const isActive = habit.days.includes(getDayLabel(date));
         const isFuture = date > new Date();
-        const isBeforeStartDate = date.setHours(0, 0, 0, 0) < new Date(trackerStartDate).setHours(0, 0, 0, 0);
+        const isBeforeStartDate = date.setHours(0, 0, 0, 0) < parseISO(trackerStartDate).setHours(0, 0, 0, 0);
         const isCheckable = isActive && !isFuture && !isBeforeStartDate;
         const isToday = formatDate(date) === formatDate(new Date());
 

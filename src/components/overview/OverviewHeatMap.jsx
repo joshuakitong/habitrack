@@ -5,26 +5,29 @@ import {
   endOfWeek,
   format,
   isSameMonth,
+  parseISO
 } from "date-fns";
 import React from "react";
+import { getSettings } from "../../hooks/useSettings";
 
-const generateMonthlyDateGrids = (numMonths) => {
+const generateMonthlyDateGrids = (numMonths, trackerStartDate) => {
   const today = new Date();
+  const startLimit = parseISO(trackerStartDate);
   const months = [];
 
   for (let i = numMonths - 1; i >= 0; i--) {
     const firstOfMonth = new Date(today.getFullYear(), today.getMonth() - i, 1);
     const lastOfMonth = endOfMonth(firstOfMonth);
-
     const start = startOfWeek(firstOfMonth, { weekStartsOn: 0 });
     const end = endOfWeek(lastOfMonth, { weekStartsOn: 0 });
-
     const allDates = eachDayOfInterval({ start, end });
 
     const weeks = [];
     for (let i = 0; i < allDates.length; i += 7) {
       const week = allDates.slice(i, i + 7).map(date =>
-        isSameMonth(date, firstOfMonth) ? format(date, "yyyy-MM-dd") : null
+        isSameMonth(date, firstOfMonth)
+          ? format(date, "yyyy-MM-dd")
+          : null
       );
       weeks.push(week);
     }
@@ -39,12 +42,14 @@ const generateMonthlyDateGrids = (numMonths) => {
   return months;
 };
 
-function getHabitActivityMap(habits) {
+function getHabitActivityMap(habits, trackerStartDate) {
+  const startLimit = parseISO(trackerStartDate);
   const activityMap = {};
   habits.forEach(habit => {
-    for (const [date, isChecked] of Object.entries(habit.checkedDates || {})) {
-      if (isChecked) {
-        activityMap[date] = (activityMap[date] || 0) + 1;
+    for (const [dateStr, isChecked] of Object.entries(habit.checkedDates || {})) {
+      const date = new Date(dateStr);
+      if (isChecked && date >= startLimit) {
+        activityMap[dateStr] = (activityMap[dateStr] || 0) + 1;
       }
     }
   });
@@ -62,8 +67,10 @@ function getIntensityClass(count) {
 };
 
 const OverviewHeatMap = ({ habits }) => {
-  const activityMap = getHabitActivityMap(habits);
-  const months = generateMonthlyDateGrids(6);
+  const { trackerStartDate } = getSettings();
+
+  const activityMap = getHabitActivityMap(habits, trackerStartDate);
+  const months = generateMonthlyDateGrids(6, trackerStartDate);
 
   return (
     <div className="bg-[#1e1e1e] p-4 rounded shadow">

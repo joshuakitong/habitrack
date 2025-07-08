@@ -6,7 +6,7 @@ import Modal from "../components/habits/Modal";
 import ConfirmDelete from "../components/habits/ConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
 import { getSettings } from "../hooks/useSettings";
-import { startOfDay, startOfWeek, addWeeks } from "date-fns";
+import { startOfDay, startOfWeek, addWeeks, parseISO } from "date-fns";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import SortableWrapper from "../components/dnd/SortableWrapper";
 
@@ -36,7 +36,7 @@ const HabitTracker = () => {
   const today = new Date();
   const startOfNextWeek = addWeeks(startOfWeek(today, { weekStartsOn: 0 }), 0);
   const isLastDate = weekDates[0] >= startOfNextWeek;
-  const isBeforeTrackerStart = startOfDay(weekDates[0]).getTime() > startOfDay(new Date(trackerStartDate)).getTime();
+  const isBeforeTrackerStart = startOfDay(weekDates[0]).getTime() > startOfDay(parseISO(trackerStartDate)).getTime();
 
   useEffect(() => {
     setSelectableWeeks(buildSelectableWeeks());
