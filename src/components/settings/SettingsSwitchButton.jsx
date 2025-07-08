@@ -1,4 +1,4 @@
-const SwitchButton = ({ id, checked, onChange }) => {
+const SettingsSwitchButton = ({ id, checked, onChange }) => {
 return (
   <>
     <label htmlFor={id} className="relative inline-block w-11 h-6 cursor-pointer">
@@ -18,4 +18,4 @@ return (
   );
 };
 
-export default SwitchButton;
+export default SettingsSwitchButton;

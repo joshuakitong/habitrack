@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getSettings, saveSettings } from "../hooks/useSettings";
-import SwitchButton from "../components/settings/SwitchButton";
+import SettingsSwitchButton from "../components/settings/SettingsSwitchButton";
 
 export default function Settings() {
   const { 
@@ -52,18 +52,18 @@ export default function Settings() {
 
             <div className="flex items-center justify-between">
               <label htmlFor="editableToggle">Enable Editing in Tracker</label>
-              <SwitchButton id="editableToggle" checked={isEditableInTracker} onChange={setIsEditableInTracker} />
+              <SettingsSwitchButton id="editableToggle" checked={isEditableInTracker} onChange={setIsEditableInTracker} />
             </div>
 
             <div className="flex items-center justify-between">
               <label htmlFor="colorCodedToggle">Color Coded Habits</label>
-              <SwitchButton id="colorCodedToggle" checked={isColorCoded} onChange={setIsColorCoded} />
+              <SettingsSwitchButton id="colorCodedToggle" checked={isColorCoded} onChange={setIsColorCoded} />
             </div>
 
             {isColorCoded &&(
               <div className="flex items-center justify-between">
                 <label htmlFor="rowColored">Colored Rows</label>
-                <SwitchButton id="rowColored" checked={isRowColored} onChange={setIsRowColored} />
+                <SettingsSwitchButton id="rowColored" checked={isRowColored} onChange={setIsRowColored} />
               </div>
             )}
         </div>
