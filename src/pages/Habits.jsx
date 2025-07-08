@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import HabitsForm from "../components/habits/HabitsForm";
-import Modal from "../components/habits/Modal";
-import ConfirmDelete from "../components/habits/ConfirmDelete";
+import HabitsModal from "../components/habits/HabitsModal";
+import HabitsConfirmDelete from "../components/habits/HabitsConfirmDelete";
 import { getSettings } from "../hooks/useSettings";
 import { colorMap } from "../utils/colors";
 import { useHabitManager } from "../hooks/useHabitManager";
@@ -144,21 +144,21 @@ const Habits = () => {
         </button>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <HabitsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <HabitsForm
           onSubmit={handleAddOrUpdateHabit}
           habit={editingHabit}
           isColorCoded={isColorCoded}
         />
-      </Modal>
+      </HabitsModal>
 
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
-        <ConfirmDelete
+      <HabitsModal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
+        <HabitsConfirmDelete
           itemName={habitToDelete?.name}
           onConfirm={confirmDelete}
           onCancel={() => setIsDeleteModalOpen(false)}
         />
-      </Modal>
+      </HabitsModal>
     </div>
   );
 };

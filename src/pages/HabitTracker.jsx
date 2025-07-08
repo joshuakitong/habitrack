@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { getWeekDates, buildSelectableWeeks, formatDate } from "../utils/dateUtils";
 import HabitRow from "../components/habits/HabitRow";
 import HabitsForm from "../components/habits/HabitsForm";
-import Modal from "../components/habits/Modal";
-import ConfirmDelete from "../components/habits/ConfirmDelete";
+import HabitsModal from "../components/habits/HabitsModal";
+import HabitsConfirmDelete from "../components/habits/HabitsConfirmDelete";
 import { useHabitManager } from "../hooks/useHabitManager";
 import { getSettings } from "../hooks/useSettings";
 import { startOfDay, startOfWeek, addWeeks, parseISO } from "date-fns";
@@ -159,21 +159,21 @@ const HabitTracker = () => {
           </SortableWrapper>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <HabitsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <HabitsForm 
           onSubmit={handleAddOrUpdateHabit} 
           habit={editingHabit}
           isColorCoded={isColorCoded}
         />
-      </Modal>
+      </HabitsModal>
 
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
-        <ConfirmDelete
+      <HabitsModal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
+        <HabitsConfirmDelete
           itemName={habitToDelete?.name}
           onConfirm={confirmDelete}
           onCancel={() => setIsDeleteModalOpen(false)}
         />
-      </Modal>
+      </HabitsModal>
     </div>
   );
 };

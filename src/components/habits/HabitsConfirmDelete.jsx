@@ -1,4 +1,4 @@
-const ConfirmDelete = ({ itemName = "this item", onConfirm, onCancel }) => {
+const HabitsConfirmDelete = ({ itemName = "this item", onConfirm, onCancel }) => {
   return (
     <div className="text-center space-y-6">
       <h2 className="text-xl font-bold">Delete Confirmation</h2>
@@ -23,4 +23,4 @@ const ConfirmDelete = ({ itemName = "this item", onConfirm, onCancel }) => {
   );
 };
 
-export default ConfirmDelete;
+export default HabitsConfirmDelete;
