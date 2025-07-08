@@ -4,6 +4,7 @@ import HabitTracker from "./pages/HabitTracker";
 import Habits from "./pages/Habits";
 import Overview from "./pages/Overview";
 import Settings from "./pages/Settings";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -19,8 +20,9 @@ function App() {
           </Routes>
         </div>
       </div>
-      <div className="text-center">App description to be added here</div>
-      <div className="text-center"><i>(work in progress)</i></div>
+      <div className="bg-[#ededed]">
+        <About />
+      </div>
     </Router>
   );
 }

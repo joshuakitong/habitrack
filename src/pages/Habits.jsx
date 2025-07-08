@@ -47,7 +47,7 @@ const SortableHabit = ({ habit, isColorCoded, handleEdit, handleDelete }) => {
             <p className="font-semibold">{habit.name}</p>
           </div>
           {habit.description && (
-            <p className="text-sm text-gray-300">{habit.description}</p>
+            <p className="text-sm text-gray-300 mt-1">{habit.description}</p>
           )}
           {habit.days?.length > 0 && (
             <p className="text-sm mt-1">
@@ -111,7 +111,7 @@ const Habits = () => {
   }, [habits]);
 
   return (
-    <div className="py-4 px-4 lg:px-42 text-white">
+    <div className="py-6 px-4 lg:px-42 text-white">
       <h1 className="text-2xl font-bold mb-4">Your Habits</h1>
 
       {habits.length === 0 ? (

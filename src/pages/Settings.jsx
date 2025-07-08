@@ -32,7 +32,7 @@ export default function Settings() {
   }, [isRowColored]);
 
   return (
-    <div className="py-4 px-4 lg:px-64 mx-auto text-white">
+    <div className="py-6 px-4 lg:px-64 mx-auto text-white">
         <h1 className="text-2xl font-bold mb-4">Settings</h1>
         <div className="bg-[#1e1e1e] rounded shadow space-y-4 p-4">
             <div className="flex items-center justify-between">
