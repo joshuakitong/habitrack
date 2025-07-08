@@ -136,7 +136,7 @@ const OverviewTopAndBottomHabits = ({ habits }) => {
   return (
     <>
       <div className="mb-6 p-4 bg-[#1e1e1e] rounded-lg shadow mt-6">
-        <h2 className="text-lg font-bold text-center text-white">Top Performers</h2>
+        <h2 className="text-lg mb-4 font-semibold text-center">Top Performing Habits</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white mt-4">
           {renderList("Most Completions", topByCount)}
@@ -147,7 +147,7 @@ const OverviewTopAndBottomHabits = ({ habits }) => {
       </div>
 
       <div className="mb-6 p-4 bg-[#1e1e1e] rounded-lg shadow mt-6">
-        <h2 className="text-lg font-bold text-center text-white">Bottom Performers</h2>
+        <h2 className="text-lg mb-4 font-semibold text-center">Bottom Performing Habits</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white mt-4">
           {renderList("Least Completions", bottomByCount)}
