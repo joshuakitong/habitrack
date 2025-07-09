@@ -31,6 +31,14 @@ export default function About() {
             <li>Select the days you want to complete them (e.g. Mon–Fri).</li>
             <li>Check them off each day, build your streaks, and don’t break the chain.</li>
           </ol>
+
+          <div className="w-full flex justify-center">
+            <img
+              src={`${import.meta.env.BASE_URL}about/Demo.gif`}
+              alt="Habit Tracker Demo"
+              className="max-w-full shadow-md mt-6"
+            />
+          </div>
         </section>
 
         <section>
