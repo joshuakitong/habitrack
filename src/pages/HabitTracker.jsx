@@ -73,8 +73,9 @@ const HabitTracker = () => {
 
   return (
     <div className="py-6 px-2 text-white">
-      <div className="flex w-full items-center justify-between">
+      <div className="flex flex-col md:flex-row w-full items-start md:items-center justify-between gap-2 md:gap-0">
         <h1 className="text-2xl font-bold">Habit Tracker</h1>
+
         <div className="flex gap-2">
           <div className="relative w-fit">
             <select
@@ -90,6 +91,7 @@ const HabitTracker = () => {
               <ChevronDown size={16} />
             </div>
           </div>
+
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
             className="bg-[#1e1e1e] border border-[#333333] px-3 py-1 rounded cursor-pointer hover:border-blue-500 focus:border-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
@@ -97,6 +99,7 @@ const HabitTracker = () => {
           >
             <ChevronLeft size={16} />
           </button>
+
           <button
             onClick={() => setWeekOffset((prev) => prev + 1)}
             className="bg-[#1e1e1e] border border-[#333333] px-3 py-1 rounded cursor-pointer hover:border-blue-500 focus:border-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
