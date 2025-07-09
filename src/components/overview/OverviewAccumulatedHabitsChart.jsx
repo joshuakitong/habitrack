@@ -41,7 +41,6 @@ export default function OverviewAccumulatedHabitsChart({ habits }) {
             data={data}
             margin={{ top: 0, right: 20, bottom: 0, left: -20 }}
           >
-          {console.log(data)}
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
           <XAxis
             dataKey="date"
