@@ -45,6 +45,9 @@ export const useHabitManager = () => {
           };
           await saveUserData(user.uid, newData);
           setHabits(newHabits);
+          
+          localStorage.removeItem("habits");
+          localStorage.removeItem("settings");
         } else {
           setHabits(habitsFromDB);
         }
