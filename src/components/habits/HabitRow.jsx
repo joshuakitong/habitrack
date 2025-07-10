@@ -2,16 +2,13 @@ import { useState, useRef, useEffect } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { formatDate, getDayLabel } from "../../utils/dateUtils";
-import { getSettings } from "../../hooks/useSettings";
 import { colorMap, bgClassMap, bgClassTodayMap } from "../../utils/colors";
 import { Pencil, Trash2, MoreVertical, Check, GripVertical } from "lucide-react";
 import { getStreaks } from "../../utils/getStreaks";
 import { parseISO } from "date-fns";
 
-const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDate }) => {
+const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDate, isEditableInTracker, isColorCoded, isRowColored }) => {
   if (!habit) return null;
-
-  const { isEditableInTracker, isColorCoded, isRowColored } = getSettings();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -85,7 +82,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
         const isChecked = habit.checkedDates?.[dateStr] || false;
         const isActive = habit.days.includes(getDayLabel(date));
         const isFuture = date > new Date();
-        const isBeforeStartDate = date.setHours(0, 0, 0, 0) < parseISO(trackerStartDate).setHours(0, 0, 0, 0);
+        const isBeforeStartDate = date.setHours(0, 0, 0, 0) < parseISO(trackerStartDate ?? new Date()).setHours(0, 0, 0, 0);
         const isCheckable = isActive && !isFuture && !isBeforeStartDate;
         const isToday = formatDate(date) === formatDate(new Date());
 

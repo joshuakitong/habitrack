@@ -1,21 +1,32 @@
 import { getDefaultTrackerStartDate } from "../utils/settingsUtils";
+import { fetchSettings, saveSettings as saveToFirebase } from "../firebase/firebaseService";
 
-const settingsKey = "habitTrackerSettings";
-
-export function getSettings() {
-  const stored = JSON.parse(localStorage.getItem(settingsKey)) || {};
-  return {
-    trackerStartDate: stored.trackerStartDate ?? getDefaultTrackerStartDate(),
-    isEditableInTracker: stored.isEditableInTracker ?? true,
-    isColorCoded: stored.isColorCoded ?? true,
-    isRowColored: stored.isRowColored ?? true,
-  };
+export async function getSettings() {
+  try {
+    const data = await fetchSettings();
+    return {
+      trackerStartDate: data?.trackerStartDate ?? getDefaultTrackerStartDate(),
+      isEditableInTracker: data?.isEditableInTracker ?? true,
+      isColorCoded: data?.isColorCoded ?? true,
+      isRowColored: data?.isRowColored ?? true,
+    };
+  } catch (err) {
+    console.error("Error fetching settings:", err);
+    return {
+      trackerStartDate: getDefaultTrackerStartDate(),
+      isEditableInTracker: true,
+      isColorCoded: true,
+      isRowColored: true,
+    };
+  }
 }
 
-export function saveSettings(newSettings) {
-  const current = JSON.parse(localStorage.getItem(settingsKey)) || {};
-  const updated = { ...current, ...newSettings };
-  localStorage.setItem(settingsKey, JSON.stringify(updated));
-
-  return { success: true };
+export async function saveSettings(newSettings) {
+  try {
+    await saveToFirebase(newSettings);
+    return { success: true };
+  } catch (err) {
+    console.error("Error saving settings:", err);
+    return { success: false };
+  }
 }

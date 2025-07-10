@@ -1,12 +1,37 @@
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
-import { getAccumulatedData } from "../../utils/getAccumulatedData";
-import { getSettings } from "../../hooks/useSettings";
-import { parseISO, format } from "date-fns";
+import { parseISO, format, subMonths, eachDayOfInterval } from "date-fns";
 
-export default function OverviewAccumulatedHabitsChart({ habits }) {
-  const { trackerStartDate } = getSettings();
+function getAccumulatedData(habits, trackerStartDate) {
+  const startDate = trackerStartDate ? parseISO(trackerStartDate) : new Date();
+  const sixMonthsAgo = subMonths(new Date(), 6);
+  const chartStart = startDate > sixMonthsAgo ? startDate : sixMonthsAgo;
+  const end = new Date();
+
+  const allDays = eachDayOfInterval({ start: chartStart, end });
+
+  let totalCompleted = 0;
+
+  return allDays.map((date) => {
+    const dateStr = format(date, "yyyy-MM-dd");
+
+    let dayCompleted = 0;
+    for (const habit of habits) {
+      const isChecked = habit.checkedDates?.[dateStr];
+      if (isChecked) dayCompleted++;
+    }
+
+    totalCompleted += dayCompleted;
+
+    return {
+      date: dateStr,
+      totalCompleted,
+    };
+  });
+}
+
+export default function OverviewAccumulatedHabitsChart({ habits, trackerStartDate }) {
   const data = getAccumulatedData(habits, trackerStartDate);
   
   const CustomTooltip = ({ active, payload, label }) => {
@@ -34,7 +59,7 @@ export default function OverviewAccumulatedHabitsChart({ habits }) {
   };
 
   return (
-    <div className="mb-6 p-4 bg-[#1e1e1e] rounded-lg shadow mt-6">
+    <div className="mb-6 p-4 bg-[#1e1e1e] rounded shadow mt-6">
       <h2 className="text-lg mb-4 font-semibold text-center">Accumulated Habit Completions</h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart

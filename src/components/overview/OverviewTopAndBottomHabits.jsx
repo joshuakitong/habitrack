@@ -1,12 +1,11 @@
 import { getStreaks } from "../../utils/getStreaks";
 import { formatDate, getDayLabel, getActiveDaysForDate } from "../../utils/dateUtils";
 import { eachDayOfInterval, parseISO } from "date-fns";
-import { getSettings } from "../../hooks/useSettings";
 
 export const calculateCompletionRate = (habit, trackerStartDate) => {
   if (!habit || !habit.checkedDates) return 0;
 
-  const startDate = parseISO(trackerStartDate);
+  const startDate = trackerStartDate ? parseISO(trackerStartDate) : new Date();
   const endDate = new Date();
 
   const checkedDates = habit.checkedDates;
@@ -30,12 +29,12 @@ export const calculateCompletionRate = (habit, trackerStartDate) => {
 };
 
 const getCompletionCountSinceTrackerStart = (habit, trackerStartDate) => {
-  const start = parseISO(trackerStartDate);
+  const startDate = trackerStartDate ? parseISO(trackerStartDate) : new Date();
   const checkedDates = habit.checkedDates || {};
 
   return Object.entries(checkedDates).filter(([dateStr, isChecked]) => {
     const date = parseISO(dateStr);
-    return isChecked && date >= start;
+    return isChecked && date >= startDate;
   }).length;
 };
 
@@ -61,9 +60,7 @@ const getBottomHabits = (habits, getValueFn, count = 5) => {
     .slice(0, count)
 };
 
-const OverviewTopAndBottomHabits = ({ habits }) => {
-  const { trackerStartDate } = getSettings();
-
+const OverviewTopAndBottomHabits = ({ habits, trackerStartDate }) => {
   const topByCount = getTopHabits(
     habits,
     "count",
@@ -135,7 +132,7 @@ const OverviewTopAndBottomHabits = ({ habits }) => {
 
   return (
     <>
-      <div className="mb-6 p-4 bg-[#1e1e1e] rounded-lg shadow mt-6">
+      <div className="mb-6 p-4 bg-[#1e1e1e] rounded shadow">
         <h2 className="text-lg mb-4 font-semibold text-center">Top Performing Habits</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white mt-4">
@@ -146,7 +143,7 @@ const OverviewTopAndBottomHabits = ({ habits }) => {
         </div>
       </div>
 
-      <div className="mb-6 p-4 bg-[#1e1e1e] rounded-lg shadow mt-6">
+      <div className="mb-6 p-4 bg-[#1e1e1e] rounded shadow mt-6">
         <h2 className="text-lg mb-4 font-semibold text-center">Bottom Performing Habits</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white mt-4">

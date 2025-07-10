@@ -2,28 +2,28 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { daysOfWeek } from "../utils/dateUtils";
 import { defaultHabits } from "../data/defaultHabits";
+import { fetchHabits, saveHabits } from "../firebase/firebaseService";
 
 export const useHabitManager = () => {
-  const [habits, setHabits] = useState(() => {
-    try {
-      const stored = localStorage.getItem("habits");
-      if (stored) return JSON.parse(stored);
-
-      localStorage.setItem("habits", JSON.stringify(defaultHabits));
-      return defaultHabits;
-    } catch {
-      return defaultHabits;
-    }
-  });
-
+  const [habits, setHabits] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editingHabit, setEditingHabit] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [habitToDelete, setHabitToDelete] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("habits", JSON.stringify(habits));
-  }, [habits]);
+    const loadHabits = async () => {
+      const storedHabits = await fetchHabits();
+      setHabits(storedHabits.length ? storedHabits : defaultHabits);
+      setLoading(false);
+    };
+    loadHabits();
+  }, []);
+
+  useEffect(() => {
+    if (!loading) saveHabits(habits);
+  }, [habits, loading]);
 
   const handleAddOrUpdateHabit = (habit) => {
     const finalHabit = {

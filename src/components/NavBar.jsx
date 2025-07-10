@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -63,6 +66,27 @@ const Navbar = () => {
         >
           Settings
         </NavLink>
+        {user ? (
+          <button
+            onClick={() => {
+              logout();
+              setMenuOpen(false);
+            }}
+            className={`${linkBase} ${linkInactive} text-left cursor-pointer`}
+          >
+            Logout
+          </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              `${linkBase} ${isActive ? linkActive : linkInactive}`
+            }
+            onClick={() => setMenuOpen(false)}
+          >
+            Login
+          </NavLink>
+        )}
       </div>
     </nav>
   );

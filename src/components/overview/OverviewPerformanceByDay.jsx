@@ -1,5 +1,4 @@
 import { parseISO } from "date-fns";
-import { getSettings } from "../../hooks/useSettings";
 import { daysOfWeek } from "../../utils/dateUtils";
 
 const renderList = (title, list) => (
@@ -25,7 +24,7 @@ const renderList = (title, list) => (
 );
 
 const getTotalsByWeekday = (habits, trackerStartDate) => {
-  const start = parseISO(trackerStartDate);
+  const start = trackerStartDate ? parseISO(trackerStartDate) : new Date();
   const totals = Array(7).fill(0);
 
   habits.forEach((habit) => {
@@ -46,8 +45,7 @@ const getTotalsByWeekday = (habits, trackerStartDate) => {
   }));
 };
 
-const OverviewPerformanceByWeekday = ({ habits }) => {
-  const { trackerStartDate } = getSettings();
+const OverviewPerformanceByWeekday = ({ habits, trackerStartDate }) => {
   const totals = getTotalsByWeekday(habits, trackerStartDate);
 
   const bestDays = [...totals]
@@ -59,7 +57,7 @@ const OverviewPerformanceByWeekday = ({ habits }) => {
     .slice(0, 3);
 
   return (
-    <div className="mb-6 p-4 bg-[#1e1e1e] rounded-lg shadow mt-6">
+    <div className="mb-6 p-4 bg-[#1e1e1e] rounded shadow mt-6">
       <h2 className="text-lg mb-4 font-semibold text-center">Habit Performance by Day</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white mt-4">

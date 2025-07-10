@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useHabitManagerContext } from "../context/HabitManagerContext";
+import { useSettingsContext } from "../context/SettingsContext";
 import HabitsForm from "../components/habits/HabitsForm";
 import HabitsModal from "../components/habits/HabitsModal";
 import HabitsConfirmDelete from "../components/habits/HabitsConfirmDelete";
-import { getSettings } from "../hooks/useSettings";
 import { colorMap } from "../utils/colors";
-import { useHabitManager } from "../hooks/useHabitManager";
 import { Pencil, Trash2, GripVertical } from "lucide-react";
 import SortableWrapper from "../components/dnd/SortableWrapper";
 import { useSortable } from "@dnd-kit/sortable";
@@ -90,25 +90,15 @@ const Habits = () => {
     handleDelete,
     confirmDelete,
     openCreateModal,
-  } = useHabitManager();
+  } = useHabitManagerContext();
 
-  const { isColorCoded } = getSettings();
+  const { settings, isLoading } = useSettingsContext();
 
-  useEffect(() => {
-    const saved = localStorage.getItem("habits");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) setHabits(parsed);
-      } catch (e) {
-        console.error("Failed to parse saved habits:", e);
-      }
-    }
-  }, []);
+  if (isLoading) {
+    return <div className="text-white text-center py-6">Loading settings...</div>;
+  }
 
-  useEffect(() => {
-    localStorage.setItem("habits", JSON.stringify(habits));
-  }, [habits]);
+  const { isColorCoded } = settings;
 
   return (
     <div className="py-6 px-4 lg:px-42 text-white">

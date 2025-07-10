@@ -4,14 +4,14 @@ import { parseISO } from "date-fns";
 export const getStreaks = (habit, trackerStartDate) => {
   if (!habit || typeof habit !== "object") return { current: 0, longest: 0, total: 0 };
 
-  const startLimit = parseISO(trackerStartDate);
+  const startDate = trackerStartDate ? parseISO(trackerStartDate) : new Date();
   const checkedDates = habit.checkedDates || {};
 
   // Step 1: Get all checked dates after trackerStartDate, sorted
   const checked = Object.keys(checkedDates)
     .filter((dateStr) => {
       const date = new Date(dateStr);
-      return checkedDates[dateStr] && date >= startLimit;
+      return checkedDates[dateStr] && date >= startDate;
     })
     .map((dateStr) => new Date(dateStr))
     .sort((a, b) => a - b);
@@ -26,7 +26,7 @@ export const getStreaks = (habit, trackerStartDate) => {
     return activeDays.includes(getDayLabel(date));
   }).length;
 
-  const start = new Date(startLimit);
+  const start = new Date(startDate);
   const end = new Date();
 
   // Step 3: Find longest streak
@@ -54,7 +54,7 @@ export const getStreaks = (habit, trackerStartDate) => {
   cursor.setHours(0, 0, 0, 0);
 
   while (recentCheckableDays.length < 2) {
-    if (cursor < startLimit) break;
+    if (cursor < startDate) break;
 
     const dayLabel = getDayLabel(cursor);
     const dateStr = formatDate(cursor);

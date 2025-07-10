@@ -16,12 +16,11 @@ export function getWeekDates(offset = 0) {
   return week;
 }
 
-export const buildSelectableWeeks = () => {
+export const buildSelectableWeeks = ({ trackerStartDate }) => {
   const today = new Date();
   const todayStart = startOfWeek(today, { weekStartsOn: 0 });
 
-  const { trackerStartDate } = getSettings();
-  const earliestDate = startOfWeek(parseISO(trackerStartDate), { weekStartsOn: 0 });
+  const earliestDate = startOfWeek(trackerStartDate ? parseISO(trackerStartDate) : new Date(), { weekStartsOn: 0 });
   const latestDate = todayStart;
 
   const selectableWeeks = [];

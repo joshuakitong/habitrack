@@ -1,22 +1,21 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useSettingsContext } from "../context/SettingsContext";
+import { useHabitManagerContext } from "../context/HabitManagerContext";
 import { getWeekDates, buildSelectableWeeks, formatDate } from "../utils/dateUtils";
 import HabitRow from "../components/habits/HabitRow";
 import HabitsForm from "../components/habits/HabitsForm";
 import HabitsModal from "../components/habits/HabitsModal";
 import HabitsConfirmDelete from "../components/habits/HabitsConfirmDelete";
-import { useHabitManager } from "../hooks/useHabitManager";
-import { getSettings } from "../hooks/useSettings";
 import { startOfDay, startOfWeek, addWeeks, parseISO } from "date-fns";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import SortableWrapper from "../components/dnd/SortableWrapper";
 
 const HabitTracker = () => {
-  const hasMounted = useRef(false);
   const [weekOffset, setWeekOffset] = useState(0);
   const [weekDates, setWeekDates] = useState(getWeekDates(0));
   const [selectableWeeks, setSelectableWeeks] = useState([]);
-  const { trackerStartDate, isEditableInTracker, isColorCoded } = getSettings();
 
+  const { settings, isLoading } = useSettingsContext();
   const {
     habits,
     setHabits,
@@ -31,16 +30,13 @@ const HabitTracker = () => {
     handleDelete,
     handleAddOrUpdateHabit,
     openCreateModal
-  } = useHabitManager();
-
-  const today = new Date();
-  const startOfNextWeek = addWeeks(startOfWeek(today, { weekStartsOn: 0 }), 0);
-  const isLastDate = weekDates[0] >= startOfNextWeek;
-  const isBeforeTrackerStart = startOfDay(weekDates[0]).getTime() > startOfDay(parseISO(trackerStartDate)).getTime();
+  } = useHabitManagerContext();
 
   useEffect(() => {
-    setSelectableWeeks(buildSelectableWeeks());
-  }, []);
+    if (!isLoading && settings?.trackerStartDate) {
+      setSelectableWeeks(buildSelectableWeeks({ trackerStartDate: settings.trackerStartDate }));
+    }
+  }, [isLoading, settings]);
 
   useEffect(() => {
     setWeekDates(getWeekDates(weekOffset));
@@ -63,13 +59,18 @@ const HabitTracker = () => {
     );
   };
 
-  useEffect(() => {
-    if (hasMounted.current) {
-      localStorage.setItem("habits", JSON.stringify(habits));
-    } else {
-      hasMounted.current = true;
-    }
-  }, [habits]);
+  if (isLoading) {
+    return <div className="text-white text-center py-6">Loading settings...</div>;
+  }
+
+  const { trackerStartDate, isEditableInTracker, isColorCoded, isRowColored } = settings;
+
+  const today = new Date();
+  const startOfNextWeek = addWeeks(startOfWeek(today, { weekStartsOn: 0 }), 0);
+  const isLastDate = weekDates[0] >= startOfNextWeek;
+  const isBeforeTrackerStart =
+    startOfDay(weekDates[0]).getTime() >
+    startOfDay(parseISO(trackerStartDate)).getTime();
 
   return (
     <div className="py-6 px-2 text-white">
@@ -143,6 +144,9 @@ const HabitTracker = () => {
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     trackerStartDate={trackerStartDate}
+                    isEditableInTracker={isEditableInTracker}
+                    isColorCoded={isColorCoded}
+                    isRowColored={isRowColored}
                   />
                 ))}
                 {isEditableInTracker && (
