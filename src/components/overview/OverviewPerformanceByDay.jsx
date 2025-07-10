@@ -52,7 +52,7 @@ const OverviewPerformanceByWeekday = ({ habits, trackerStartDate }) => {
     .sort((a, b) => b.total - a.total)
     .slice(0, 3);
 
-  const worstDays = [...totals]
+  const worstDays = [...totals].reverse()
     .sort((a, b) => a.total - b.total)
     .slice(0, 3);
 
