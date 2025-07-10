@@ -9,7 +9,7 @@ export default function About() {
         <section>
           <h2 className="text-xl font-semibold mb-2">What is Habit Tracker?</h2>
           <p className="text-[#1e1e1e]">
-            Habit Tracker is a free, easy-to-use web app designed to help you build and maintain daily habits.
+            Habit Tracker is a free web app designed to help you build and maintain daily habits.
             It gives you a visual way to check off goals and stay consistent over time.
             Whether you're trying to drink more water, work out, or write daily, Habit Tracker keeps you on track and motivated.
           </p>
@@ -18,7 +18,7 @@ export default function About() {
         <section>
           <h2 className="text-xl font-semibold mb-2">What is Habit Tracking?</h2>
           <p className="text-[#1e1e1e]">
-            Habit tracking is the simple act of marking down when you complete a habit — and it's one of the most effective ways to stay consistent.
+            Habit tracking is the simple act of marking down when you complete a habit, and is one of the most effective ways to stay consistent.
             By tracking your progress, you turn your goals into daily actions and build lasting routines.
             It’s a proven strategy to boost focus, motivation, and self-discipline.
           </p>
@@ -54,7 +54,7 @@ export default function About() {
             </li>
             <li>
               Detailed Overview: View your progress with stats like streaks,
-              completion rate, most productive days, and more — all auto-calculated.
+              completion rate, most productive days, and more.
             </li>
             <li>
               Smart Settings: Customize the app to your preferences.
@@ -64,6 +64,7 @@ export default function About() {
             <li>
               Sync and Access Anywhere: Log in to save your habits and access them
               from any device. Your data stays safe and portable.
+              Prefer to stay offline? You can use the app without logging in too.
             </li>
           </ul>
         </section>
