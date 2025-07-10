@@ -4,7 +4,7 @@ import { Pencil, Save } from "lucide-react";
 import SettingsSwitchButton from "../components/settings/SettingsSwitchButton";
 
 export default function Settings() {
-  const { settings, saveSettings, isLoading } = useSettingsContext();
+  const { settings, saveSettings, isSettingsLoading } = useSettingsContext();
 
   const [trackerStartDate, setTrackerStartDate] = useState("");
   const [isEditingDate, setIsEditingDate] = useState(false);
@@ -16,14 +16,14 @@ export default function Settings() {
   const [hasInitialized, setHasInitialized] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && settings) {
+    if (!isSettingsLoading && settings) {
       setTrackerStartDate(settings.trackerStartDate);
       setIsEditableInTracker(settings.isEditableInTracker);
       setIsColorCoded(settings.isColorCoded);
       setIsRowColored(settings.isRowColored);
       setHasInitialized(true);
     }
-  }, [isLoading, settings]);
+  }, [isSettingsLoading, settings]);
 
   const handleEditClick = () => {
     setIsEditingDate(true);
@@ -75,8 +75,12 @@ export default function Settings() {
     if (hasInitialized) saveSettings({ isRowColored });
   }, [isRowColored]);
 
-  if (isLoading || !hasInitialized) {
-    return <div className="text-white text-center py-6">Loading settings...</div>;
+  if (isSettingsLoading || !hasInitialized) {
+    return (
+      <div className="flex items-center justify-center py-6">
+        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   return (

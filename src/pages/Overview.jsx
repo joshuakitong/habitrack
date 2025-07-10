@@ -6,15 +6,18 @@ import OverviewAccumulatedHabitsChart from "../components/overview/OverviewAccum
 import OverviewPerformanceByDay from "../components/overview/OverviewPerformanceByDay";
 
 const Overview = () => {
-  const { settings, isLoading } = useSettingsContext();
-  
-  if (isLoading) {
-    return <div className="text-white text-center py-6">Loading settings...</div>;
+  const { settings, isSettingsLoading } = useSettingsContext();
+  const { habits, isHabitLoading } = useHabitManagerContext();
+
+  if (isSettingsLoading || isHabitLoading) {
+    return (
+      <div className="flex items-center justify-center py-6">
+        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   const { trackerStartDate } = settings;
-  
-  const { habits } = useHabitManagerContext();
 
   return (
     <div className="py-6 px-4 lg:px-42 text-white">

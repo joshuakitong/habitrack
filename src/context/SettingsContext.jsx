@@ -1,33 +1,14 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { getSettings, saveSettings as saveToStorage } from "../hooks/useSettings";
+import { createContext, useContext } from "react";
+import { useSettingsManager } from "../hooks/useSettingsManager";
 
 const SettingsContext = createContext();
+export const useSettingsContext = () => useContext(SettingsContext);
 
 export const SettingsProvider = ({ children }) => {
-  const [settings, setSettings] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const loadSettings = async () => {
-    setIsLoading(true);
-    const data = await getSettings();
-    setSettings(data);
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const saveSettings = async (newSettings) => {
-    await saveToStorage(newSettings);
-    await loadSettings();
-  };
-
+  const settingsManager = useSettingsManager();
   return (
-    <SettingsContext.Provider value={{ settings, isLoading, saveSettings }}>
+    <SettingsContext.Provider value={settingsManager}>
       {children}
     </SettingsContext.Provider>
   );
 };
-
-export const useSettingsContext = () => useContext(SettingsContext);

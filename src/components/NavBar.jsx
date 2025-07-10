@@ -27,7 +27,7 @@ const Navbar = () => {
         </NavLink>
 
         <button
-          className="md:hidden text-white focus:outline-none -mt-[0.5rem]"
+          className="md:hidden text-white focus:outline-none -mt-[1rem]"
           onClick={toggleMenu}
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -67,15 +67,16 @@ const Navbar = () => {
           Settings
         </NavLink>
         {user ? (
-          <button
+          <NavLink
+            to="/login"
+            className={`${linkBase} ${linkInactive} text-left cursor-pointer`}
             onClick={() => {
               logout();
               setMenuOpen(false);
             }}
-            className={`${linkBase} ${linkInactive} text-left cursor-pointer`}
           >
             Logout
-          </button>
+          </NavLink>
         ) : (
           <NavLink
             to="/login"

@@ -15,10 +15,11 @@ const HabitTracker = () => {
   const [weekDates, setWeekDates] = useState(getWeekDates(0));
   const [selectableWeeks, setSelectableWeeks] = useState([]);
 
-  const { settings, isLoading } = useSettingsContext();
+  const { settings, isSettingsLoading } = useSettingsContext();
   const {
     habits,
     setHabits,
+    isHabitLoading,
     editingHabit,
     habitToDelete,
     isModalOpen,
@@ -33,10 +34,10 @@ const HabitTracker = () => {
   } = useHabitManagerContext();
 
   useEffect(() => {
-    if (!isLoading && settings?.trackerStartDate) {
+    if (!isSettingsLoading && settings?.trackerStartDate) {
       setSelectableWeeks(buildSelectableWeeks({ trackerStartDate: settings.trackerStartDate }));
     }
-  }, [isLoading, settings]);
+  }, [isSettingsLoading, settings]);
 
   useEffect(() => {
     setWeekDates(getWeekDates(weekOffset));
@@ -59,8 +60,12 @@ const HabitTracker = () => {
     );
   };
 
-  if (isLoading) {
-    return <div className="text-white text-center py-6">Loading settings...</div>;
+  if (isSettingsLoading || isHabitLoading) {
+    return (
+      <div className="flex items-center justify-center py-6">
+        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   const { trackerStartDate, isEditableInTracker, isColorCoded, isRowColored } = settings;
@@ -123,7 +128,7 @@ const HabitTracker = () => {
                   {weekDates.map((date) => {
                     const isToday = formatDate(date) === formatDate(new Date());
                     return (
-                      <th key={date} className={`text-center border-y border-[#333333] bg-[#1e1e1e] ${isToday ? "bg-[#353535]" : ""}`}>
+                      <th key={date} className={`text-center border-y w-[4rem] border-[#333333] bg-[#1e1e1e] ${isToday ? "bg-[#353535]" : ""}`}>
                         <div className="text-sm mt-2">{date.toLocaleDateString("en-US", { weekday: "short" })}</div>
                         <div className="text-xs text-gray-400 mb-2">{date.getDate()}</div>
                       </th>
@@ -149,6 +154,7 @@ const HabitTracker = () => {
                     isRowColored={isRowColored}
                   />
                 ))}
+
                 {isEditableInTracker && (
                   <tr>
                     <td className="text-center">
@@ -159,6 +165,11 @@ const HabitTracker = () => {
                         + Add Habit
                       </button>
                     </td>
+                    {habits.length === 0 && (
+                      <td colSpan={weekDates.length} className="text-center text-gray-400 pl-4">
+                        No habits yet. Click “+ Add Habit” to begin.
+                      </td>
+                    )}
                   </tr>
                 )}
               </tbody>

@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { daysOfWeek } from "../utils/dateUtils";
 import { defaultHabits } from "../data/defaultHabits";
-import { fetchHabits, saveHabits } from "../firebase/firebaseService";
+import { saveHabits, getUserData, saveUserData } from "../firebase/firebaseService";
+import { useAuth } from "../context/AuthContext";
 
 export const useHabitManager = () => {
+  const { user } = useAuth();
+
   const [habits, setHabits] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isHabitLoading, setLoading] = useState(true);
   const [editingHabit, setEditingHabit] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -14,16 +17,48 @@ export const useHabitManager = () => {
 
   useEffect(() => {
     const loadHabits = async () => {
-      const storedHabits = await fetchHabits();
-      setHabits(storedHabits.length ? storedHabits : defaultHabits);
+      setLoading(true);
+
+      if (!user) {
+        const localHabits = JSON.parse(localStorage.getItem("habits") || "[]");
+        const localInitialized = !!localStorage.getItem("hasInitialized");
+
+        if (!localInitialized) {
+          localStorage.setItem("habits", JSON.stringify(defaultHabits));
+          localStorage.setItem("hasInitialized", "true");
+          setHabits(defaultHabits);
+        } else {
+          setHabits(localHabits);
+        }
+      } else {
+        const userData = await getUserData(user.uid);
+        const habitsFromDB = userData?.habits ?? [];
+        const hasInitialized = !!userData?.createdAt;
+        const localHabits = JSON.parse(localStorage.getItem("habits") || "[]");
+
+        if (!hasInitialized) {
+          const newHabits = localHabits.length ? localHabits : defaultHabits;
+          const newData = {
+            habits: newHabits,
+            settings: {},
+            createdAt: new Date().toISOString(),
+          };
+          await saveUserData(user.uid, newData);
+          setHabits(newHabits);
+        } else {
+          setHabits(habitsFromDB);
+        }
+      }
+
       setLoading(false);
     };
+
     loadHabits();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    if (!loading) saveHabits(habits);
-  }, [habits, loading]);
+    if (!isHabitLoading) saveHabits(habits);
+  }, [habits, isHabitLoading]);
 
   const handleAddOrUpdateHabit = (habit) => {
     const finalHabit = {
@@ -68,6 +103,7 @@ export const useHabitManager = () => {
   return {
     habits,
     setHabits,
+    isHabitLoading,
     editingHabit,
     isModalOpen,
     isDeleteModalOpen,

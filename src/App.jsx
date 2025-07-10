@@ -1,6 +1,7 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { SettingsProvider } from "./context/SettingsContext";
 import { HabitManagerProvider } from "./context/HabitManagerContext";
+import { useAuth } from "./context/AuthContext";
 import Navbar from "./components/NavBar";
 import HabitTracker from "./pages/HabitTracker";
 import Habits from "./pages/Habits";
@@ -10,6 +11,16 @@ import LoginPage from "./pages/LoginPage";
 import About from "./pages/About";
 
 function App() {
+  const { authLoading } = useAuth();
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center py-6">
+        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  
   return (
     <SettingsProvider>
       <HabitManagerProvider>

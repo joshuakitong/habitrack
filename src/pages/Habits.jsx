@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useHabitManagerContext } from "../context/HabitManagerContext";
 import { useSettingsContext } from "../context/SettingsContext";
 import HabitsForm from "../components/habits/HabitsForm";
@@ -79,6 +78,7 @@ const Habits = () => {
   const {
     habits,
     setHabits,
+    isHabitLoading,
     editingHabit,
     isModalOpen,
     isDeleteModalOpen,
@@ -92,10 +92,14 @@ const Habits = () => {
     openCreateModal,
   } = useHabitManagerContext();
 
-  const { settings, isLoading } = useSettingsContext();
+  const { settings, isSettingsLoading } = useSettingsContext();
 
-  if (isLoading) {
-    return <div className="text-white text-center py-6">Loading settings...</div>;
+  if (isSettingsLoading || isHabitLoading) {
+    return (
+      <div className="flex items-center justify-center py-6">
+        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   const { isColorCoded } = settings;
@@ -105,7 +109,7 @@ const Habits = () => {
       <h1 className="text-2xl font-bold mb-4">Your Habits</h1>
 
       {habits.length === 0 ? (
-        <p className="text-gray-400">No habits yet. Add your first one below.</p>
+        <p className="text-gray-400">No habits yet. Click “+ Add Habit” to begin.</p>
       ) : (
         <SortableWrapper items={habits.map(h => h.id)} onReorder={(newOrder) => {
           const newHabits = newOrder.map(id => habits.find(h => h.id === id));

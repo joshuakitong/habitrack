@@ -7,6 +7,17 @@ const LOCAL_SETTINGS_KEY = "settings";
 
 const getCurrentUser = () => getAuth().currentUser;
 
+export const getUserData = async (uid) => {
+  const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
+  return docSnap.exists() ? docSnap.data() : {};
+};
+
+export const saveUserData = async (uid, data) => {
+  const docRef = doc(db, "users", uid);
+  await setDoc(docRef, data, { merge: true });
+};
+
 export const fetchHabits = async () => {
   const user = getCurrentUser();
   if (!user) {
@@ -16,18 +27,28 @@ export const fetchHabits = async () => {
 
   const docRef = doc(db, "users", user.uid);
   const docSnap = await getDoc(docRef);
-  return docSnap.exists() ? docSnap.data().habits || [] : [];
+  const data = docSnap.exists() ? docSnap.data() : {};
+  return data.habits || [];
 };
 
 export const saveHabits = async (habits) => {
   const user = getCurrentUser();
   if (!user) {
-    localStorage.setItem(LOCAL_HABITS_KEY, JSON.stringify(habits));
+    localStorage.setItem("habits", JSON.stringify(habits));
     return;
   }
 
   const docRef = doc(db, "users", user.uid);
-  await setDoc(docRef, { habits }, { merge: true });
+  const docSnap = await getDoc(docRef);
+
+  const existingData = docSnap.exists() ? docSnap.data() : {};
+  const newData = {
+    ...existingData,
+    habits,
+    createdAt: existingData.createdAt ?? new Date().toISOString(),
+  };
+
+  await setDoc(docRef, newData, { merge: true });
 };
 
 export const fetchSettings = async () => {
