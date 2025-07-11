@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Check } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -23,7 +23,13 @@ const Navbar = () => {
             `${linkBase} ${isActive ? linkActive : linkInactive}`
           }
         >
-          Habit Tracker
+          <button
+            className="w-6 h-6 bg-blue-500 rounded-md border flex items-center justify-center cursor-pointer bg-gradient-to-r border-none"
+          >
+            <span className="text-white text-sm font-bold">
+              <Check size={18} />
+            </span>
+          </button>
         </NavLink>
 
         <button

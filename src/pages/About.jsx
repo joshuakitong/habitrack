@@ -7,11 +7,11 @@ export default function About() {
 
       <div className="space-y-6">
         <section>
-          <h2 className="text-xl font-semibold mb-2">What is Habit Tracker?</h2>
+          <h2 className="text-xl font-semibold mb-2">What is HabiTrack?</h2>
           <p className="text-[#1e1e1e]">
-            Habit Tracker is a free web app designed to help you build and maintain daily habits.
+            HabiTrack is a free web app designed to help you build and maintain daily habits.
             It gives you a visual way to check off goals and stay consistent over time.
-            Whether you're trying to drink more water, work out, or write daily, Habit Tracker keeps you on track and motivated.
+            Whether you're trying to drink more water, work out, or write daily, HabiTrack keeps you on track and motivated.
           </p>
         </section>
 
@@ -25,7 +25,7 @@ export default function About() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mb-2">How to Use Habit Tracker</h2>
+          <h2 className="text-xl font-semibold mb-2">How to Use HabiTrack</h2>
           <ol className="text-[#1e1e1e] list-decimal list-inside space-y-1">
             <li>Add the habits you want to build.</li>
             <li>Select the days you want to complete them (e.g. Mon–Fri).</li>
@@ -35,7 +35,7 @@ export default function About() {
           <div className="w-full flex justify-center">
             <img
               src={`${import.meta.env.BASE_URL}about/Demo.gif`}
-              alt="Habit Tracker Demo"
+              alt="HabiTracker Demo"
               className="max-w-full shadow-md mt-6"
             />
           </div>

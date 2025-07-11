@@ -80,7 +80,7 @@ const HabitTracker = () => {
   return (
     <div className="py-6 px-2 text-white">
       <div className="flex flex-col md:flex-row w-full items-start md:items-center justify-between gap-2 md:gap-0">
-        <h1 className="text-2xl font-bold">Habit Tracker</h1>
+        <h1 className="text-2xl font-bold">HabiTrack</h1>
 
         <div className="flex gap-2">
           <div className="relative w-fit">
