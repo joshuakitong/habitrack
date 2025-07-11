@@ -48,7 +48,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
                 style={{ backgroundColor: isColorCoded ? colorMap[habit.color] : "" }}
               />
             )}
-            <div className="w-[8rem] lg:w-[12rem] truncate">{habit.name}</div>
+            <div className="w-[6rem] lg:w-full truncate">{habit.name}</div>
           </div>
 
           <div className="relative mr-2" ref={menuRef}>

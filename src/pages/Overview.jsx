@@ -20,7 +20,7 @@ const Overview = () => {
   const { trackerStartDate } = settings;
 
   return (
-    <div className="py-6 px-4 lg:px-42 text-white">
+    <div className="pt-6 px-4 lg:px-42 text-white">
       <h1 className="text-2xl font-bold mb-4">Overview</h1>
       <OverviewTopAndBottomHabits habits={habits} trackerStartDate={trackerStartDate} />
       <OverviewPerformanceByDay habits={habits} trackerStartDate={trackerStartDate} />

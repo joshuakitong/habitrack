@@ -25,7 +25,7 @@ function App() {
     <SettingsProvider>
       <HabitManagerProvider>
         <Router>
-          <div className="bg-[#121212] min-h-screen">
+          <div className="bg-[#121212] min-h-screen pb-6">
             <div className="max-w-5xl mx-auto">
               <Navbar />
               <Routes>
