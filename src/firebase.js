@@ -3,13 +3,15 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBiWFR1ozHWEGg_QOkNvxZwbcXP5huq3dM",
-  authDomain: "habit-tracker-app-8b422.firebaseapp.com",
-  projectId: "habit-tracker-app-8b422",
-  storageBucket: "habit-tracker-app-8b422.firebasestorage.app",
-  messagingSenderId: "196986427309",
-  appId: "1:196986427309:web:d8abb85ec6f8720b447324"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
+
+console.log(import.meta.env.VITE_FIREBASE_API_KEY);
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

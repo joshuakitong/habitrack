@@ -13,4 +13,7 @@ export default defineConfig({
       cert: fs.readFileSync('localhost.pem'),
     },
   },
+  define: {
+    'process.env': process.env,
+  }
 })
