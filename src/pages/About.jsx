@@ -45,7 +45,7 @@ export default function About() {
           <h2 className="text-xl font-semibold mb-2">Features</h2>
           <ul className="text-[#1e1e1e] list-disc list-inside space-y-2">
             <li>
-              Habit Calendar: Track your habits on a weekly calendar view.
+              Habit Calendar: Track your habits on a weekly or monthly calendar view.
               Easily check off completed days and visualize your consistency over time.
             </li>
             <li>
