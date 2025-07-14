@@ -7,4 +7,5 @@ export const defaultSettings = {
   isEditableInTracker: true,
   isColorCoded: true,
   isRowColored: true,
+  viewMode: "weekly",
 };

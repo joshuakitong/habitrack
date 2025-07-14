@@ -40,6 +40,7 @@ export async function getSettings() {
     isEditableInTracker: remoteSettings.isEditableInTracker ?? true,
     isColorCoded: remoteSettings.isColorCoded ?? true,
     isRowColored: remoteSettings.isRowColored ?? true,
+    viewMode: remoteSettings.viewMode ?? "weekly",
   };
 }
 
@@ -60,3 +61,24 @@ export async function saveSettings(newSettings) {
     return { success: false };
   }
 }
+
+export const getViewMode = async () => {
+  const user = getAuth().currentUser;
+  const uid = user.currentUser?.uid;
+  if (!uid) return "weekly";
+
+  const ref = doc(db, "users", uid, "settings", "main");
+  const snapshot = await getDoc(ref);
+  return snapshot.exists() && snapshot.data().viewMode
+    ? snapshot.data().viewMode
+    : "weekly";
+};
+
+export const setViewMode = async (mode) => {
+  const user = getAuth().currentUser;
+  const uid = user.currentUser?.uid;
+  if (!uid) return;
+
+  const ref = doc(db, "users", uid, "settings", "main");
+  await setDoc(ref, { viewMode: mode }, { merge: true });
+};

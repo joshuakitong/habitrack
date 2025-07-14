@@ -19,7 +19,7 @@ const HabitTracker = () => {
   const [visibleDates, setVisibleDates] = useState([]);
   const tableRef = useRef(null);
 
-  const { settings, isSettingsLoading } = useSettingsContext();
+  const { settings, isSettingsLoading, saveSettings } = useSettingsContext();
   const {
     habits,
     setHabits,
@@ -47,6 +47,12 @@ const HabitTracker = () => {
       );
     }
   }, [isSettingsLoading, settings]);
+
+  useEffect(() => {
+    if (settings?.viewMode) {
+      setViewMode(settings.viewMode);
+    }
+  }, [settings?.viewMode]);
 
   useEffect(() => {
     if (viewMode === "weekly") {
@@ -89,6 +95,11 @@ const HabitTracker = () => {
     );
   };
 
+  const handleChangeView = (mode) => {
+    setViewMode(mode);
+    saveSettings({ viewMode: mode });
+  };
+
   if (isSettingsLoading || isHabitLoading) {
     return (
       <div className="flex items-center justify-center py-6">
@@ -116,7 +127,7 @@ const HabitTracker = () => {
         <div className="flex flex-col md:flex-row gap-2 md:items-center">
           <div className="flex text-sm rounded overflow-hidden h-9.5 w-full border border-[#333333]">
             <button
-              onClick={() => setViewMode("weekly")}
+              onClick={() => handleChangeView("weekly")}
               className={`px-4 py-1 flex-1 ${
                 viewMode === "weekly"
                   ? "bg-[#1e1e1e] text-blue-500"
@@ -126,7 +137,7 @@ const HabitTracker = () => {
               Weekly
             </button>
             <button
-              onClick={() => setViewMode("monthly")}
+              onClick={() => handleChangeView("monthly")}
               className={`px-4 py-1 flex-1 ${
                 viewMode === "monthly"
                   ? "bg-[#1e1e1e] text-blue-500"
