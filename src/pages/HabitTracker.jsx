@@ -125,7 +125,7 @@ const HabitTracker = () => {
         </div>
 
         <div className="flex flex-col md:flex-row gap-2 md:items-center">
-          <div className="flex text-sm rounded overflow-hidden h-9.5 w-full border border-[#333333]">
+          <div className="flex text-sm rounded overflow-hidden h-9.5 w-full border bg-[#1e1e1e] border-[#333333]">
             <button
               onClick={() => handleChangeView("weekly")}
               className={`px-4 py-1 flex-1 ${
