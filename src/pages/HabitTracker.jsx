@@ -50,13 +50,13 @@ const HabitTracker = () => {
 
   useEffect(() => {
     if (viewMode === "weekly") {
-      setVisibleDates(getWeekDates(monthOffset));
+      setVisibleDates(getWeekDates(weekOffset));
 
       setTimeout(() => {
         const todayHeader = document.querySelector("th.today-col") ?? document.querySelector("th.habits-col");
         if (todayHeader && tableRef.current) {
           const offsetLeft = todayHeader.offsetLeft;
-          tableRef.current.scrollTo({ left: offsetLeft - 100, behavior: "smooth" });
+          tableRef.current.scrollTo({ left: offsetLeft - 150, behavior: "smooth" });
         }
       }, 0);
     } else {
@@ -66,11 +66,11 @@ const HabitTracker = () => {
         const todayHeader = document.querySelector("th.today-col") ?? document.querySelector("th.habits-col");
         if (todayHeader && tableRef.current) {
           const offsetLeft = todayHeader.offsetLeft;
-          tableRef.current.scrollTo({ left: offsetLeft - 100, behavior: "smooth" });
+          tableRef.current.scrollTo({ left: offsetLeft - 150, behavior: "smooth" });
         }
       }, 0);
     }
-  }, [viewMode, monthOffset]);
+  }, [viewMode, weekOffset, monthOffset]);
 
   const toggleCheck = (habitId, dateStr) => {
     setHabits((prev) =>
