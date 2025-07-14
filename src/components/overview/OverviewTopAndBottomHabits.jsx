@@ -2,10 +2,10 @@ import { getStreaks } from "../../utils/getStreaks";
 import { formatDate, getDayLabel, getActiveDaysForDate } from "../../utils/dateUtils";
 import { eachDayOfInterval, parseISO } from "date-fns";
 
-export const calculateCompletionRate = (habit, trackerStartDate) => {
+export const calculateCompletionRate = (habit, startBoundary) => {
   if (!habit || !habit.checkedDates) return 0;
 
-  const startDate = trackerStartDate ? parseISO(trackerStartDate) : new Date();
+  const startDate = startBoundary ? parseISO(startBoundary) : new Date();
   const endDate = new Date();
 
   const checkedDates = habit.checkedDates;
@@ -28,8 +28,8 @@ export const calculateCompletionRate = (habit, trackerStartDate) => {
   return totalCheckableDays === 0 ? 0 : (completedDays / totalCheckableDays) * 100;
 };
 
-const getCompletionCountSinceTrackerStart = (habit, trackerStartDate) => {
-  const startDate = trackerStartDate ? parseISO(trackerStartDate) : new Date();
+const getCompletionCountSinceTrackerStart = (habit, startBoundary) => {
+  const startDate = startBoundary ? parseISO(startBoundary) : new Date();
   const checkedDates = habit.checkedDates || {};
 
   return Object.entries(checkedDates).filter(([dateStr, isChecked]) => {
@@ -60,49 +60,49 @@ const getBottomHabits = (habits, getValueFn, count = 5) => {
     .slice(0, count)
 };
 
-const OverviewTopAndBottomHabits = ({ habits, trackerStartDate }) => {
+const OverviewTopAndBottomHabits = ({ habits, startBoundary }) => {
   const topByCount = getTopHabits(
     habits,
     "count",
-    (habit) => getCompletionCountSinceTrackerStart(habit, trackerStartDate)
+    (habit) => getCompletionCountSinceTrackerStart(habit, startBoundary)
   );
 
   const topByCurrentStreak = getTopHabits(
     habits,
     "longestCurrentStreak",
-    (habit) => getStreaks(habit, trackerStartDate).current
+    (habit) => getStreaks(habit, startBoundary).current
   );
 
   const topByLongestStreak = getTopHabits(
     habits,
     "longestStreak",
-    (habit) => getStreaks(habit, trackerStartDate).longest
+    (habit) => getStreaks(habit, startBoundary).longest
   );
 
   const topByCompletion = getTopHabits(
     habits,
     "completion",
-    (habit) => calculateCompletionRate(habit, trackerStartDate)
+    (habit) => calculateCompletionRate(habit, startBoundary)
   );
 
   const bottomByCount = getBottomHabits(
     habits,
-    (habit) => getCompletionCountSinceTrackerStart(habit, trackerStartDate)
+    (habit) => getCompletionCountSinceTrackerStart(habit, startBoundary)
   );
 
   const bottomByCompletion = getBottomHabits(
     habits,
-    (habit) => calculateCompletionRate(habit, trackerStartDate)
+    (habit) => calculateCompletionRate(habit, startBoundary)
   );
 
   const bottomByCurrentStreak = getBottomHabits(
     habits,
-    (habit) => getStreaks(habit, trackerStartDate).current
+    (habit) => getStreaks(habit, startBoundary).current
   );
 
   const bottomByLongestStreak = getBottomHabits(
     habits,
-    (habit) => getStreaks(habit, trackerStartDate).longest
+    (habit) => getStreaks(habit, startBoundary).longest
   );
 
   const renderList = (title, list, suffix = "") => (

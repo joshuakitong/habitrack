@@ -3,8 +3,8 @@ import {
 } from "recharts";
 import { parseISO, format, subMonths, eachDayOfInterval } from "date-fns";
 
-function getAccumulatedData(habits, trackerStartDate) {
-  const startDate = trackerStartDate ? parseISO(trackerStartDate) : new Date();
+function getAccumulatedData(habits, startBoundary) {
+  const startDate = startBoundary ? parseISO(startBoundary) : new Date();
   const sixMonthsAgo = subMonths(new Date(), 6);
   const chartStart = startDate > sixMonthsAgo ? startDate : sixMonthsAgo;
   const end = new Date();
@@ -31,8 +31,8 @@ function getAccumulatedData(habits, trackerStartDate) {
   });
 }
 
-export default function OverviewAccumulatedHabitsChart({ habits, trackerStartDate }) {
-  const data = getAccumulatedData(habits, trackerStartDate);
+export default function OverviewAccumulatedHabitsChart({ habits, startBoundary }) {
+  const data = getAccumulatedData(habits, startBoundary);
   
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {

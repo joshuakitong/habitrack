@@ -23,8 +23,8 @@ const renderList = (title, list) => (
   </div>
 );
 
-const getTotalsByDay = (habits, trackerStartDate) => {
-  const start = trackerStartDate ? parseISO(trackerStartDate) : new Date();
+const getTotalsByDay = (habits, startBoundary) => {
+  const start = startBoundary ? parseISO(startBoundary) : new Date();
   const totals = Array(7).fill(0);
 
   habits.forEach((habit) => {
@@ -45,8 +45,8 @@ const getTotalsByDay = (habits, trackerStartDate) => {
   }));
 };
 
-const OverviewPerformanceByDay = ({ habits, trackerStartDate }) => {
-  const totals = getTotalsByDay(habits, trackerStartDate);
+const OverviewPerformanceByDay = ({ habits, startBoundary }) => {
+  const totals = getTotalsByDay(habits, startBoundary);
 
   const bestDays = [...totals]
     .sort((a, b) => b.total - a.total)

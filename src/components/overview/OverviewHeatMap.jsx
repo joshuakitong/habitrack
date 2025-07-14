@@ -9,7 +9,7 @@ import {
 } from "date-fns";
 import React from "react";
 
-const generateMonthlyDateGrids = (numMonths, trackerStartDate) => {
+const generateMonthlyDateGrids = (numMonths, startBoundary) => {
   const today = new Date();
   const months = [];
 
@@ -40,8 +40,8 @@ const generateMonthlyDateGrids = (numMonths, trackerStartDate) => {
   return months;
 };
 
-function getHabitActivityMap(habits, trackerStartDate) {
-  const startLimit = trackerStartDate ? parseISO(trackerStartDate) : new Date();
+function getHabitActivityMap(habits, startBoundary) {
+  const startLimit = startBoundary ? parseISO(startBoundary) : new Date();
   const activityMap = {};
   habits.forEach(habit => {
     for (const [dateStr, isChecked] of Object.entries(habit.checkedDates || {})) {
@@ -65,9 +65,9 @@ function getIntensityClass(count) {
   return "bg-gray-700";
 };
 
-const OverviewHeatMap = ({ habits, trackerStartDate }) => {
-  const activityMap = getHabitActivityMap(habits, trackerStartDate);
-  const months = generateMonthlyDateGrids(6, trackerStartDate);
+const OverviewHeatMap = ({ habits, startBoundary }) => {
+  const activityMap = getHabitActivityMap(habits, startBoundary);
+  const months = generateMonthlyDateGrids(6, startBoundary);
 
   return (
     <div className="bg-[#1e1e1e] p-4 rounded shadow">
