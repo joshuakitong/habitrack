@@ -1,7 +1,6 @@
 import { getAuth } from "firebase/auth";
 import { defaultSettings } from "../data/defaultSettings";
 import { fetchSettings as fetchFromFirestore, saveSettings as saveToFirestore } from "../firebase/firebaseService";
-import { getDefaultTrackerStartDate } from "../utils/settingsUtils";
 
 export async function getSettings() {
   const user = getAuth().currentUser;
@@ -11,7 +10,6 @@ export async function getSettings() {
   if (!user) {
     const fallbackSettings = {
       ...defaultSettings,
-      trackerStartDate: getDefaultTrackerStartDate(),
       ...localSettings,
     };
 
@@ -31,14 +29,14 @@ export async function getSettings() {
 
     const fallbackSettings = localHasBeenInitialized && Object.keys(localSettings).length
       ? { ...defaultSettings, ...localSettings } 
-      : { ...defaultSettings, trackerStartDate: getDefaultTrackerStartDate() };
+      : { ...defaultSettings };
 
     await saveToFirestore(fallbackSettings);
     return fallbackSettings;
   }
 
   return {
-    trackerStartDate: remoteSettings.trackerStartDate ?? getDefaultTrackerStartDate(),
+    trackerStartDate: remoteSettings.trackerStartDate,
     isEditableInTracker: remoteSettings.isEditableInTracker ?? true,
     isColorCoded: remoteSettings.isColorCoded ?? true,
     isRowColored: remoteSettings.isRowColored ?? true,

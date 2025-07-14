@@ -40,7 +40,6 @@ export const useHabitManager = () => {
           const newHabits = localHabits.length ? localHabits : defaultHabits;
           const newData = {
             habits: newHabits,
-            settings: {},
             createdAt: new Date().toISOString(),
           };
           await saveUserData(user.uid, newData);
