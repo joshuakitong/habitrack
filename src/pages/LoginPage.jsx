@@ -7,11 +7,13 @@ export default function LoginPage() {
     loginWithGoogle,
     registerWithEmail,
     loginWithEmail,
-    user
+    resendVerificationEmail,
+    logout
   } = useAuth();
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -22,11 +24,29 @@ export default function LoginPage() {
 
     try {
       if (isRegister) {
-        await registerWithEmail(email, password);
+        if (password !== confirmPassword) {
+          setError("Passwords do not match.");
+          return;
+        }
+
+        const userCredential = await registerWithEmail(email, password);
+        alert("A verification email has been sent. Please verify your email before logging in.");
+        setIsRegister(false);
+        clearFields();
+        return;
       } else {
-        await loginWithEmail(email, password);
+        const userCredential = await loginWithEmail(email, password);
+
+        await userCredential.user.reload();
+
+        if (!userCredential.user.emailVerified) {
+          await logout();
+          setError("Please verify your email before logging in. Check your inbox and spam folder.");
+          return;
+        }
+
+        navigate("/");
       }
-      navigate("/");
     } catch (err) {
       setError(err.message);
     }
@@ -41,6 +61,35 @@ export default function LoginPage() {
     }
   };
 
+  const handleResend = async () => {
+    try {
+      const userCredential = await loginWithEmail(email, password);
+
+      await userCredential.user.reload();
+
+      if (!userCredential.user.emailVerified) {
+        await resendVerificationEmail();
+        alert("Verification email resent. Please check your inbox and spam folder.");
+      } else {
+        setError("Your email is already verified. You can log in.");
+      }
+    } catch (err) {
+      setError("Failed to resend verification email. Check your email and password.");
+    }
+  };
+
+  const handleIsRegister = () => {
+    setIsRegister(!isRegister);
+    clearFields();
+  };
+
+  const clearFields = () => {
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setError("");
+  };
+
   return (
     <div className="py-6 px-4 lg:px-84 mx-auto text-white">
       <h1 className="text-2xl font-bold mb-4">{isRegister ? "Register" : "Login"}</h1>
@@ -48,6 +97,17 @@ export default function LoginPage() {
 
         {error && (
           <p className="text-red-400 text-sm mb-4 text-center">{error}</p>
+        )}
+
+        {error.includes("verify your email") && (
+          <div className="text-center">
+            <button
+              className="text-blue-500 hover:underline cursor-pointer text-sm"
+              onClick={handleResend}
+            >
+              Resend verification email
+            </button>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -67,6 +127,16 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {isRegister && (
+            <input
+              type="password"
+              required
+              placeholder="Re-enter Password"
+              className="w-full p-2 rounded bg-[#121212] border border-[#333333] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          )}
           <button
             type="submit"
             className="w-full cursor-pointer bg-blue-500 px-4 py-2 rounded text-white font-semibold hover:bg-blue-600"
@@ -88,7 +158,7 @@ export default function LoginPage() {
           {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
           <button
             className="text-blue-500 cursor-pointer hover:underline"
-            onClick={() => setIsRegister(!isRegister)}
+            onClick={() => handleIsRegister()}
           >
             {isRegister ? "Login" : "Register"}
           </button>

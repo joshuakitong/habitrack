@@ -3,7 +3,8 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendEmailVerification,
 } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, provider } from "../firebase";
@@ -18,19 +19,32 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+      if (firebaseUser && !firebaseUser.emailVerified) {
+        setUser(null);
+      } else {
+        setUser(firebaseUser);
+      }
       setAuthLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
   const loginWithGoogle = () => signInWithPopup(auth, provider);
-  const registerWithEmail = (email, password) =>
-    createUserWithEmailAndPassword(auth, email, password);
+  const registerWithEmail = async (email, password) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(userCredential.user);
+    return userCredential;
+  };
   const loginWithEmail = (email, password) =>
     signInWithEmailAndPassword(auth, email, password);
+  const resendVerificationEmail = async () => {
+    if (auth.currentUser && !auth.currentUser.emailVerified) {
+      await sendEmailVerification(auth.currentUser);
+    }
+  };
+  
   const logout = () => signOut(auth);
-
+  
   return (
     <AuthContext.Provider
       value={{
@@ -39,6 +53,7 @@ export function AuthProvider({ children }) {
         registerWithEmail,
         loginWithEmail,
         logout,
+        resendVerificationEmail,
         authLoading
       }}
     >
