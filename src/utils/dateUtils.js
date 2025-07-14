@@ -1,10 +1,19 @@
-import { startOfWeek, format, differenceInCalendarWeeks, addWeeks, parseISO } from "date-fns";
-import { getSettings } from "../hooks/useSettings";
+import { 
+  startOfWeek, 
+  format, 
+  differenceInCalendarWeeks, 
+  addWeeks, 
+  parseISO, 
+  startOfMonth, 
+  addMonths, 
+  endOfMonth, 
+  eachDayOfInterval 
+} from "date-fns";
 
 export function getWeekDates(offset = 0) {
   const today = new Date();
   const startOfWeek = new Date(today);
-  const day = startOfWeek.getDay(); // 0 = Sun, 1 = Mon, ...
+  const day = startOfWeek.getDay();
   startOfWeek.setDate(startOfWeek.getDate() - day + offset * 7);
 
   const week = [];
@@ -15,6 +24,13 @@ export function getWeekDates(offset = 0) {
   }
   return week;
 }
+
+export const getMonthDates = (offset = 0) => {
+  const today = new Date();
+  const start = startOfMonth(addMonths(today, offset));
+  const end = endOfMonth(addMonths(today, offset));
+  return eachDayOfInterval({ start, end });
+};
 
 export const buildSelectableWeeks = ({ trackerStartDate }) => {
   const today = new Date();
@@ -46,6 +62,26 @@ export const buildSelectableWeeks = ({ trackerStartDate }) => {
   }
 
   return selectableWeeks.reverse(); 
+};
+
+export const buildSelectableMonths = ({ trackerStartDate }) => {
+  const start = startOfMonth(parseISO(trackerStartDate));
+  const current = startOfMonth(new Date());
+
+  const months = [];
+  let cursor = current;
+  let offset = 0;
+
+  while (cursor >= start) {
+    months.push({
+      label: format(cursor, "MMMM yyyy"),
+      offset,
+    });
+    offset -= 1;
+    cursor = addMonths(cursor, -1);
+  }
+
+  return months.reverse();
 };
 
 export const sortedDays = (unsortedDays) =>

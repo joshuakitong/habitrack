@@ -11,7 +11,7 @@ return (
     />
     <div className="absolute inset-0 bg-gray-600 rounded-full peer-checked:bg-blue-500 transition-colors duration-300"></div>
     <div
-      className="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"
+      className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"
     ></div>
     </label>
   </>
