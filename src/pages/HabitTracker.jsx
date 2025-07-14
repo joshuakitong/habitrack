@@ -128,20 +128,20 @@ const HabitTracker = () => {
           <div className="flex text-sm rounded overflow-hidden h-9.5 w-full border bg-[#1e1e1e] border-[#333333]">
             <button
               onClick={() => handleChangeView("weekly")}
-              className={`px-4 py-1 flex-1 ${
+              className={`px-4 py-1 flex-1 focus:border-blue-500 focus:outline-none ${
                 viewMode === "weekly"
                   ? "bg-[#1e1e1e] text-blue-500"
-                  : "bg-[#111111] text-gray-400 rounded border border-[#333333] hover:border-blue-500 focus:border-blue-500 cursor-pointer"
+                  : "bg-[#111111] text-gray-400 rounded border border-[#333333] hover:border-blue-500 cursor-pointer"
               }`}
             >
               Weekly
             </button>
             <button
               onClick={() => handleChangeView("monthly")}
-              className={`px-4 py-1 flex-1 ${
+              className={`px-4 py-1 flex-1 focus:border-blue-500 focus:outline-none ${
                 viewMode === "monthly"
                   ? "bg-[#1e1e1e] text-blue-500"
-                  : "bg-[#111111] text-gray-400 rounded border border-[#333333] hover:border-blue-500 focus:border-blue-500 cursor-pointer"
+                  : "bg-[#111111] text-gray-400 rounded border border-[#333333] hover:border-blue-500 cursor-pointer"
               }`}
             >
               Monthly
