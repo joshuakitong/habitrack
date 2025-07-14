@@ -1,9 +1,9 @@
 const today = new Date();
-const thirtyDaysAgo = new Date(today);
-thirtyDaysAgo.setDate(today.getDate() - 30);
+const fourteenDaysAgo = new Date(today);
+fourteenDaysAgo.setDate(today.getDate() - 14);
 
 export const defaultSettings = {
-  trackerStartDate: thirtyDaysAgo.toISOString().split("T")[0],
+  trackerStartDate: fourteenDaysAgo.toISOString().split("T")[0],
   isEditableInTracker: true,
   isColorCoded: true,
   isRowColored: true,
