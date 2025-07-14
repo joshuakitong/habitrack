@@ -153,7 +153,7 @@ const HabitTracker = () => {
                 <select
                   value={weekOffset}
                   onChange={(e) => setWeekOffset(parseInt(e.target.value))}
-                  className="bg-[#1e1e1e] h-9.5 text-sm text-white p-2 pl-4 pr-10 rounded border border-[#333333] hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+                  className="bg-[#1e1e1e] h-9.5 w-40 text-sm text-white p-2 pl-4 pr-10 rounded border border-[#333333] hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
                 >
                   {selectableWeeks.map(({ label, offset }) => (
                     <option key={offset} value={offset}>
@@ -190,7 +190,7 @@ const HabitTracker = () => {
                 <select
                   value={monthOffset}
                   onChange={(e) => setMonthOffset(parseInt(e.target.value))}
-                  className="bg-[#1e1e1e] h-9.5 text-sm text-white p-2 pl-4 pr-10 rounded border border-[#333333] hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
+                  className="bg-[#1e1e1e] h-9.5 w-40 text-sm text-white p-2 pl-4 pr-10 rounded border border-[#333333] hover:border-blue-500 focus:border-blue-500 focus:outline-none appearance-none cursor-pointer"
                 >
                   {selectableMonths.map(({ label, offset }) => (
                     <option key={offset} value={offset}>
