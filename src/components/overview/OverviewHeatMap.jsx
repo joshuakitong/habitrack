@@ -55,12 +55,13 @@ function getHabitActivityMap(habits, trackerStartDate) {
 };
 
 function getIntensityClass(count) {
-  if (count >= 6) return "bg-blue-800";
-  if (count >= 5) return "bg-blue-700";
-  if (count >= 4) return "bg-blue-600";
-  if (count >= 3) return "bg-blue-500";
-  if (count >= 2) return "bg-blue-400";
-  if (count >= 1) return "bg-blue-300";
+  if (count >= 9) return "bg-blue-700";
+  if (count >= 7) return "bg-blue-600";
+  if (count >= 5) return "bg-blue-500";
+  if (count >= 4) return "bg-blue-400";
+  if (count >= 3) return "bg-blue-300";
+  if (count >= 2) return "bg-blue-200";
+  if (count >= 1) return "bg-blue-100";
   return "bg-gray-700";
 };
 
