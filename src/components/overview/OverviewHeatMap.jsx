@@ -54,16 +54,33 @@ function getHabitActivityMap(habits, startBoundary) {
   return activityMap;
 };
 
-function getIntensityClass(count) {
-  if (count >= 9) return "bg-blue-700";
-  if (count >= 7) return "bg-blue-600";
-  if (count >= 5) return "bg-blue-500";
-  if (count >= 4) return "bg-blue-400";
-  if (count >= 3) return "bg-blue-300";
-  if (count >= 2) return "bg-blue-200";
-  if (count >= 1) return "bg-blue-100";
+function getIntensityClass(count, totalHabits) {
+  if (totalHabits === 0) {
+    return "bg-gray-700";
+  }
+
+  const threshold5 = totalHabits * 0.8;
+  const threshold4 = totalHabits * 0.6;
+  const threshold3 = totalHabits * 0.4;
+  const threshold2 = totalHabits * 0.2;
+  const threshold1 = 1;
+
+  if (count >= threshold5) return legendColors[4];
+  if (count >= threshold4) return legendColors[3];
+  if (count >= threshold3) return legendColors[2];
+  if (count >= threshold2) return legendColors[1];
+  if (count >= threshold1) return legendColors[0];
+
   return "bg-gray-700";
 };
+
+const legendColors = [
+  "bg-blue-200",
+  "bg-blue-300",
+  "bg-blue-400",
+  "bg-blue-500",
+  "bg-blue-600",
+];
 
 const OverviewHeatMap = ({ habits, startBoundary }) => {
   const activityMap = getHabitActivityMap(habits, startBoundary);
@@ -90,7 +107,7 @@ const OverviewHeatMap = ({ habits, startBoundary }) => {
                         <div
                           key={dateStr}
                           title={`${dateStr}: ${activityMap[dateStr] || 0} completed`}
-                          className={`w-4 h-4 rounded-sm ${getIntensityClass(activityMap[dateStr] || 0)}`}
+                          className={`w-4 h-4 rounded-sm ${getIntensityClass(activityMap[dateStr] || 0, habits.length)}`}
                         />
                       ) : (
                         <div key={j} className="w-4 h-4 opacity-0" />
@@ -102,6 +119,17 @@ const OverviewHeatMap = ({ habits, startBoundary }) => {
             </div>
           </React.Fragment>
         ))}
+      </div>
+      <div className="flex justify-end items-center mt-4 text-gray-400 text-sm">
+        <span className="text-xs mr-1">Less</span>
+        {legendColors.map((colorClass, index) => (
+          <div
+            key={index}
+            className={`w-3 h-3 rounded-sm ${colorClass} mx-[1px]`}
+            title={`Intensity Level ${index + 1}`}
+          ></div>
+        ))}
+        <span className="text-xs ml-1">More</span>
       </div>
     </div>
   );
