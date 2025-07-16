@@ -25,6 +25,7 @@ const Navbar = () => {
         >
           <button
             className="w-6 h-6 bg-blue-500 rounded-md border flex items-center justify-center cursor-pointer bg-gradient-to-r border-none"
+            onClick={() => setMenuOpen(false)}
           >
             <span className="text-white text-sm font-bold">
               <Check size={18} />
