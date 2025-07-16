@@ -285,6 +285,7 @@ const HabitTracker = () => {
                   isColorCoded={isColorCoded}
                   isRowColored={isRowColored}
                   isLastHabitRow={index === habits.length - 1 && !isEditableInTracker}
+                  isMonthlyView={viewMode === "monthly"}
                 />
               ))}
 
