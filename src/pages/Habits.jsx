@@ -109,7 +109,9 @@ const Habits = () => {
       <h1 className="text-2xl font-bold mb-4">Your Habits</h1>
 
       {habits.length === 0 ? (
-        <p className="text-gray-400">No habits yet. Click “+ Add Habit” to begin.</p>
+        <div className="bg-[#1e1e1e] p-4 rounded shadow flex items-center justify-center">
+          <p className="text-gray-400">No habits yet. Click “+ Add Habit” to begin.</p>
+        </div>
       ) : (
         <SortableWrapper items={habits.map(h => h.id)} onReorder={(newOrder) => {
           const newHabits = newOrder.map(id => habits.find(h => h.id === id));
