@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from 'react-router-dom';
 import { useSettingsContext } from "../context/SettingsContext";
 import { useHabitManagerContext } from "../context/HabitManagerContext";
 import { getWeekDates, buildSelectableWeeks, getMonthDates, buildSelectableMonths, formatDate } from "../utils/dateUtils";
@@ -57,25 +58,32 @@ const HabitTracker = () => {
   useEffect(() => {
     if (viewMode === "weekly") {
       setVisibleDates(getWeekDates(weekOffset));
-
-      setTimeout(() => {
-        const todayHeader = document.querySelector("th.today-col") ?? document.querySelector("th.habits-col");
-        if (todayHeader && tableRef.current) {
-          const offsetLeft = todayHeader.offsetLeft;
-          tableRef.current.scrollTo({ left: offsetLeft - 150, behavior: "smooth" });
-        }
-      }, 0);
     } else {
       setVisibleDates(getMonthDates(monthOffset));
-
-      setTimeout(() => {
-        const todayHeader = document.querySelector("th.today-col") ?? document.querySelector("th.habits-col");
-        if (todayHeader && tableRef.current) {
-          const offsetLeft = todayHeader.offsetLeft;
-          tableRef.current.scrollTo({ left: offsetLeft - 150, behavior: "smooth" });
-        }
-      }, 0);
     }
+
+    setTimeout(() => {
+      const todayHeader = document.querySelector("th.today-col") ?? document.querySelector("th.habits-col");
+      const scrollContainer = tableRef.current;
+
+      if (todayHeader && scrollContainer) {
+        const headerRect = todayHeader.getBoundingClientRect();
+        const containerRect = scrollContainer.getBoundingClientRect();
+
+        const isHeaderVisible = (
+          headerRect.left >= containerRect.left &&
+          headerRect.right <= containerRect.right + 20
+        );
+
+        if (!isHeaderVisible) {
+          const offsetLeft = todayHeader.offsetLeft;
+          scrollContainer.scrollTo({
+            left: offsetLeft - 150,
+            behavior: "smooth"
+          });
+        }
+      }
+    }, 0);
   }, [viewMode, weekOffset, monthOffset]);
 
   const toggleCheck = (habitId, dateStr) => {
@@ -224,7 +232,7 @@ const HabitTracker = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto mt-4 scrollbar-thin-dark" ref={tableRef}>
+      <div className="overflow-x-auto mt-4 scrollbar-thin-dark border-1 border-[#333333] bg-[#333333] rounded-md" ref={tableRef}>
         <SortableWrapper
           items={habits.map((h) => h.id)}
           onReorder={(newOrder) => {
@@ -235,7 +243,7 @@ const HabitTracker = () => {
           <table className="w-full text-left border-collapse overflow-hidden">
             <thead>
               <tr>
-                <th className="w-[12rem] lg:w-[18rem] pl-4 border border-[#333333] bg-[#1e1e1e] habits-col">Habits</th>
+                <th className="w-[12rem] lg:w-[18rem] pl-4 border border-[#333333] bg-[#1e1e1e] rounded-tl-md habits-col">Habits</th>
                 {visibleDates.map((date) => {
                   const isToday = formatDate(date) === formatDate(today);
                   return (
@@ -258,13 +266,13 @@ const HabitTracker = () => {
                 <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">
                   Longest Streak
                 </th>
-                <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333]">
+                <th className="text-center text-xs font-normal w-[3rem] leading-snug bg-[#1e1e1e] border border-[#333333] rounded-tr-md">
                   Total Count
                 </th>
               </tr>
             </thead>
             <tbody>
-              {habits.map((habit) => (
+              {habits.map((habit, index) => (
                 <HabitRow
                   key={habit.id}
                   habit={habit}
@@ -276,25 +284,41 @@ const HabitTracker = () => {
                   isEditableInTracker={isEditableInTracker}
                   isColorCoded={isColorCoded}
                   isRowColored={isRowColored}
+                  isLastHabitRow={index === habits.length - 1 && !isEditableInTracker}
                 />
               ))}
 
               {isEditableInTracker && (
-                <tr>
-                  <td className="text-center">
-                    <button
-                      onClick={openCreateModal}
-                      className="text-white font-semibold py-2 px-4 hover:bg-[#1e1e1e] w-full cursor-pointer"
-                    >
-                      + Add Habit
-                    </button>
-                  </td>
-                  {habits.length === 0 && (
-                    <td colSpan={visibleDates.length} className="text-center text-gray-400 pl-4">
-                      No habits yet. Click “+ Add Habit” to begin.
+                <>
+                  <tr>
+                    {habits.length === 0 && (
+                      <td colSpan={visibleDates.length + 4} className="bg-[#121212] text-center text-gray-400 py-2">
+                        No habits yet. Click on “+ Add Habit” to begin.
+                      </td>
+                    )}
+                  </tr>
+                  <tr>
+                    <td className="text-center" colSpan={visibleDates.length + 4}>
+                      <button
+                        onClick={openCreateModal}
+                        className={`text-white font-semibold py-2 px-4 hover:bg-[#353535] bg-[#1e1e1e] ${habits.length === 0 ? "border-t" : ""} border-[#333333] w-full rounded-b-lg cursor-pointer`}
+                      >
+                        + Add Habit
+                      </button>
                     </td>
-                  )}
-                </tr>
+                  </tr>
+                </>
+              )}
+              {!isEditableInTracker && (
+                <>
+                  <tr>
+                    {habits.length === 0 && (
+                      <td colSpan={visibleDates.length + 4} className="text-center text-gray-400 py-2">
+                        No habits yet. Go to <Link to="/habits" className="text-blue-500 hover:text-blue-600 hover:underline">Habits</Link> and click on “+ Add Habit” to begin.
+                      </td>
+                    )}
+                  </tr>
+                </>
               )}
             </tbody>
           </table>

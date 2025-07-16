@@ -7,7 +7,7 @@ import { Pencil, Trash2, MoreVertical, Check, GripVertical } from "lucide-react"
 import { getStreaks } from "../../utils/getStreaks";
 import { parseISO } from "date-fns";
 
-const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDate, isEditableInTracker, isColorCoded, isRowColored }) => {
+const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDate, isEditableInTracker, isColorCoded, isRowColored, isLastHabitRow }) => {
   if (!habit) return null;
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,7 +33,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
 
   return (
     <tr ref={setNodeRef} style={style} {...attributes}>
-      <td className={`py-4 font-medium border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>
+      <td className={`py-4 font-medium border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : "bg-[#121212]"} ${isLastHabitRow ? "rounded-bl-lg" : ""}`}>
         <div className="flex items-center justify-between gap-2 pl-3">
           <div className="flex items-center gap-2">
             {isEditableInTracker && (
@@ -48,7 +48,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
                 style={{ backgroundColor: isColorCoded ? colorMap[habit.color] : "" }}
               />
             )}
-            <div className="w-[6rem] lg:w-full truncate">{habit.name}</div>
+            <div className="min-w-[6rem] max-w-[12rem] lg:w-full truncate">{habit.name}</div>
           </div>
 
           <div className="relative mr-2" ref={menuRef}>
@@ -92,7 +92,7 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
             className={`text-center h-[3rem] border-y border-[#333333] ${
               isToday
                 ? `${isColorCoded && isRowColored ? bgClassTodayMap[habit.color] : "bg-[#1e1e1e]"}`
-                : `${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`
+                : `${isColorCoded && isRowColored ? bgClassMap[habit.color] : "bg-[#121212]"}`
             }`}
           >
             <div className="flex justify-center w-[3rem] mx-auto items-center">
@@ -118,9 +118,9 @@ const HabitRow = ({ habit, weekDates, onToggle, onEdit, onDelete, trackerStartDa
         );
       })}
 
-      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>{current}</td>
-      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>{longest}</td>
-      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : ""}`}>{total}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : "bg-[#121212]"}`}>{current}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : "bg-[#121212]"}`}>{longest}</td>
+      <td className={`text-center border border-[#333333] ${isColorCoded && isRowColored ? bgClassMap[habit.color] : "bg-[#121212]"} ${isLastHabitRow ? "rounded-br-md" : ""}`}>{total}</td>
     </tr>
   );
 };
