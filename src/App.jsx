@@ -1,7 +1,6 @@
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { SettingsProvider } from "./context/SettingsContext";
-import { HabitManagerProvider } from "./context/HabitManagerContext";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import { useSettingsContext } from "./context/SettingsContext";
 import Navbar from "./components/NavBar";
 import HabitTracker from "./pages/HabitTracker";
 import Habits from "./pages/Habits";
@@ -12,6 +11,15 @@ import About from "./pages/About";
 
 function App() {
   const { authLoading } = useAuth();
+  const { settings } = useSettingsContext();
+
+  const location = useLocation();
+  const currentPathname = location.pathname;
+
+  const dynamicMaxWidthClass =
+    settings?.viewMode === "monthly" && currentPathname === "/"
+      ? "max-w-full"
+      : "max-w-5xl";
 
   if (authLoading) {
     return (
@@ -22,11 +30,9 @@ function App() {
   }
   
   return (
-    <SettingsProvider>
-      <HabitManagerProvider>
-        <Router>
+        <>
           <div className="bg-[#121212] min-h-screen pb-6">
-            <div className="max-w-5xl mx-auto">
+            <div className={`mx-auto ${dynamicMaxWidthClass}`}>
               <Navbar />
               <Routes>
                 <Route path="/" element={<HabitTracker />} />
@@ -40,9 +46,8 @@ function App() {
           <div className="bg-[#ededed]">
             <About />
           </div>
-        </Router>
-      </HabitManagerProvider>
-    </SettingsProvider>
+        </>
+      
   );
 }
 
